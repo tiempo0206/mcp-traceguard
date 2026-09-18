@@ -1,0 +1,121 @@
+{
+  "$defs": {
+    "ScenarioCase": {
+      "additionalProperties": false,
+      "properties": {
+        "approved": {
+          "default": false,
+          "title": "Approved",
+          "type": "boolean"
+        },
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "category": {
+          "minLength": 1,
+          "title": "Category",
+          "type": "string"
+        },
+        "expect": {
+          "$ref": "#/$defs/ScenarioExpectation"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "category",
+        "tool",
+        "expect"
+      ],
+      "title": "ScenarioCase",
+      "type": "object"
+    },
+    "ScenarioExpectation": {
+      "additionalProperties": false,
+      "properties": {
+        "call_executed": {
+          "title": "Call Executed",
+          "type": "boolean"
+        },
+        "matched_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Matched Rules",
+          "type": "array"
+        },
+        "minimum_redactions": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Minimum Redactions",
+          "type": "integer"
+        },
+        "outcome": {
+          "enum": [
+            "allow",
+            "deny",
+            "approval_required",
+            "error"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        }
+      },
+      "required": [
+        "outcome",
+        "call_executed"
+      ],
+      "title": "ScenarioExpectation",
+      "type": "object"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/scenario-suite.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/ScenarioCase"
+      },
+      "minItems": 1,
+      "title": "Cases",
+      "type": "array"
+    },
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "cases"
+  ],
+  "title": "ScenarioSuite",
+  "type": "object"
+}

@@ -101,6 +101,36 @@ mcp-traceguard verify-trace artifacts/profile.trace.json
 The fake `api_token` returned by the fixture is replaced with `[REDACTED]`
 before persistence. A denied or unapproved call is not sent to the server.
 
+Replay the committed eight-case adversarial pack:
+
+```bash
+mcp-traceguard replay \
+  --suite scenarios/runtime-security.json \
+  --policy examples/runtime.policy.json \
+  --output artifacts/runtime-security.report.json \
+  --trace-dir artifacts/runtime-security-traces \
+  -- python examples/runtime_server.py
+```
+
+Every case checks the observed decision, whether the tool actually ran, the
+matched policy rules, minimum expected redactions, and trace integrity. Static
+catalog reports also include a transparent 0–100 risk score assembled from
+per-finding contributions; it is a prioritization aid, not a vulnerability
+probability.
+
+Convert a catalog report to GitHub-compatible SARIF 2.1.0:
+
+```bash
+mcp-traceguard sarif \
+  --report artifacts/drift-report.json \
+  --output artifacts/traceguard.sarif \
+  --artifact examples/drifted_server.py
+```
+
+The CI workflow validates this path and preserves the SARIF file as a build
+artifact. Projects that want Security-tab alerts can upload the same file with
+`github/codeql-action/upload-sarif` and `security-events: write`.
+
 ## Why this is separate from EvalMerge
 
 EvalMerge focuses on offline human review of LLM evaluation results. MCP

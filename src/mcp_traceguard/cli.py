@@ -13,8 +13,10 @@ from mcp import StdioServerParameters
 
 from mcp_traceguard.analysis import analyze_snapshot
 from mcp_traceguard.artifact_schemas import export_artifact_schemas
-from mcp_traceguard.models import ExecutionTrace, Policy
+from mcp_traceguard.models import ExecutionTrace, Policy, ScenarioSuite
 from mcp_traceguard.runtime import execute_guarded_call, verify_trace
+from mcp_traceguard.sarif import analysis_to_sarif
+from mcp_traceguard.scenarios import replay_suite
 from mcp_traceguard.snapshot import capture_snapshot, load_snapshot, write_json
 
 
@@ -78,6 +80,21 @@ def build_parser() -> argparse.ArgumentParser:
 
     verify = subparsers.add_parser("verify-trace", help="Verify a trace hash chain")
     verify.add_argument("trace", type=Path)
+
+    replay = subparsers.add_parser("replay", help="Replay a versioned security scenario suite")
+    replay.add_argument("--suite", type=Path, required=True)
+    replay.add_argument("--policy", type=Path, required=True)
+    replay.add_argument("--output", type=Path, required=True)
+    replay.add_argument("--trace-dir", type=Path, required=True)
+    replay.add_argument("--force", action="store_true")
+    _add_target_arguments(replay)
+
+    sarif = subparsers.add_parser("sarif", help="Convert an analysis report to SARIF 2.1.0")
+    sarif.add_argument("--report", type=Path, required=True)
+    sarif.add_argument("--output", type=Path, required=True)
+    sarif.add_argument("--artifact", default="mcp-server")
+    sarif.add_argument("--automation-id", default="mcp-traceguard/catalog")
+    sarif.add_argument("--force", action="store_true")
     return parser
 
 
@@ -151,6 +168,40 @@ def _verify_trace_command(args: argparse.Namespace) -> int:
     return 0
 
 
+def _replay_command(args: argparse.Namespace) -> int:
+    suite = ScenarioSuite.model_validate_json(args.suite.read_text(encoding="utf-8"))
+    report, traces = asyncio.run(
+        replay_suite(
+            _target(args),
+            suite=suite,
+            policy=_read_policy(args.policy),
+        )
+    )
+    for case_id, trace in traces.items():
+        write_json(args.trace_dir / f"{case_id}.trace.json", trace, force=args.force)
+    write_json(args.output, report, force=args.force)
+    print(
+        f"{'PASS' if report.passed else 'FAIL'}: {report.summary.passed}/"
+        f"{report.summary.total} scenarios ({report.summary.score_percent:.2f}%)",
+        file=sys.stderr,
+    )
+    return 0 if report.passed else 1
+
+
+def _sarif_command(args: argparse.Namespace) -> int:
+    from mcp_traceguard.models import AnalysisReport
+
+    report = AnalysisReport.model_validate_json(args.report.read_text(encoding="utf-8"))
+    document = analysis_to_sarif(
+        report,
+        artifact_uri=args.artifact,
+        automation_id=args.automation_id,
+    )
+    write_json(args.output, document, force=args.force)
+    print(f"Wrote {len(report.findings)} SARIF results to {args.output}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -165,8 +216,12 @@ def main(argv: list[str] | None = None) -> None:
             code = 0
         elif args.subcommand == "call":
             code = _call_command(args)
-        else:
+        elif args.subcommand == "verify-trace":
             code = _verify_trace_command(args)
+        elif args.subcommand == "replay":
+            code = _replay_command(args)
+        else:
+            code = _sarif_command(args)
     except (FileExistsError, OSError, ValueError) as error:
         parser.exit(2, f"error: {error}\n")
     raise SystemExit(code)

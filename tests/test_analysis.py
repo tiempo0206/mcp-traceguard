@@ -25,6 +25,8 @@ def test_clean_snapshot_passes() -> None:
     )
     assert report.passed
     assert report.summary.total == 0
+    assert report.risk.score == 0
+    assert report.risk.rating == "none"
 
 
 def test_added_and_changed_tools_fail_baseline() -> None:
@@ -43,6 +45,8 @@ def test_added_and_changed_tools_fail_baseline() -> None:
     changed = next(finding for finding in report.findings if finding.rule_id == "TG103")
     assert changed.details["changes"][0]["path"] == "/description"
     assert changed.details["impact_counts"]["metadata"] == 1
+    assert report.risk.score == 28
+    assert report.risk.rating == "moderate"
 
 
 def test_allowlist_and_denied_pattern_are_independent_findings() -> None:

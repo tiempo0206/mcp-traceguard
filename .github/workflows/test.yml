@@ -46,3 +46,18 @@ jobs:
             --trace /tmp/profile.trace.json \
             -- python examples/runtime_server.py
           mcp-traceguard verify-trace /tmp/profile.trace.json
+          mcp-traceguard replay \
+            --suite scenarios/runtime-security.json \
+            --policy examples/runtime.policy.json \
+            --output /tmp/runtime-security.report.json \
+            --trace-dir /tmp/runtime-security-traces \
+            -- python examples/runtime_server.py
+          mcp-traceguard sarif \
+            --report /tmp/drift-report.json \
+            --output /tmp/traceguard.sarif \
+            --artifact examples/drifted_server.py
+      - name: Preserve TraceGuard SARIF example
+        uses: actions/upload-artifact@v4
+        with:
+          name: traceguard-sarif
+          path: /tmp/traceguard.sarif

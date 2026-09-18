@@ -123,3 +123,39 @@ evidence without persisting secrets.
 
 Turn individual guarded calls into versioned, replayable adversarial scenarios
 with expected outcomes and a deterministic benchmark score.
+
+## 2026-09-18 — Day 1 continued: replayable security pack and SARIF
+
+### Goal
+
+Make security claims reproducible across machines and export evidence in a form
+that existing CI platforms understand.
+
+### Work completed
+
+- Added a versioned scenario-suite contract and replay runner.
+- Built an eight-case security pack covering secret redaction, shell denial,
+  explicit approval, deny precedence, default deny, and URL scheme/host bounds.
+- Scored five observable properties per case: decision, actual execution,
+  redaction count, matched rules, and trace integrity.
+- Added per-category scores and preserved one sealed trace per case.
+- Added a transparent 0–100 catalog risk score with per-finding contributions
+  and documented that it is a prioritization aid rather than probability.
+- Added GitHub-compatible SARIF 2.1.0 output with stable partial fingerprints,
+  rule metadata, locations, and risk properties.
+- Extended CI to replay the pack, create SARIF, and upload it as an artifact.
+- Added strict JSON Schemas for scenario suites and scenario reports.
+
+### Verification
+
+- Ruff format and lint: passed.
+- Pytest: 20 tests passed.
+- Runtime Security Pack: 8/8 scenarios passed with all generated trace chains
+  independently verified.
+- Drift fixture: four findings converted to four SARIF 2.1.0 results.
+- Committed artifact-schema regression test covers all six current formats.
+
+### Next task
+
+Build reproducible scale benchmarks and stable result summaries, then surface
+catalog, scenario, SARIF, and trace evidence in a local browser application.

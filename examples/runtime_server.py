@@ -30,5 +30,19 @@ def shell_exec(command: str) -> str:
     return f"not executed: {command}"
 
 
+@mcp.tool()
+def echo_unclassified(text: str) -> str:
+    """Echo text for exercising the default runtime decision."""
+
+    return text
+
+
+@mcp.tool()
+def fetch_url(url: str) -> dict[str, str]:
+    """Simulate a URL fetch without making a network request."""
+
+    return {"url": url, "status": "simulated"}
+
+
 if __name__ == "__main__":
     mcp.run()

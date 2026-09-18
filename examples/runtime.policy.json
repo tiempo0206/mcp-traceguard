@@ -1,5 +1,7 @@
 {
   "allowed_tools": [
+    "echo_unclassified",
+    "fetch_url",
     "publish_message",
     "read_profile",
     "shell_exec"
@@ -47,8 +49,33 @@
       "id": "no-shell",
       "reason": "Shell execution exceeds this client's capability boundary",
       "tool_pattern": "shell_exec"
+    },
+    {
+      "action": "allow",
+      "conditions": [
+        {
+          "action": "deny",
+          "operator": "url_scheme_not_in",
+          "path": "/url",
+          "reason": "Only HTTPS fixture URLs are permitted",
+          "value": [
+            "https"
+          ]
+        },
+        {
+          "action": "deny",
+          "operator": "url_host_not_in",
+          "path": "/url",
+          "reason": "The fixture is restricted to api.example.com",
+          "value": [
+            "api.example.com"
+          ]
+        }
+      ],
+      "id": "bounded-fetch",
+      "reason": "A narrowly scoped simulated HTTPS read is allowed",
+      "tool_pattern": "fetch_url"
     }
   ],
   "schema_version": "1.0"
 }
-

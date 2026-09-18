@@ -107,6 +107,19 @@ class ReportSummary(StrictModel):
     total: int
 
 
+class RiskContribution(StrictModel):
+    rule_id: str
+    tool: str | None = None
+    points: int = Field(ge=0)
+    reason: str
+
+
+class RiskSummary(StrictModel):
+    score: int = Field(ge=0, le=100)
+    rating: Literal["none", "low", "moderate", "high", "critical"]
+    contributions: list[RiskContribution]
+
+
 class AnalysisReport(StrictModel):
     schema_version: Literal["1.0"] = "1.0"
     generated_at: str
@@ -115,6 +128,7 @@ class AnalysisReport(StrictModel):
     passed: bool
     fail_on: Literal["warning", "error", "never"]
     summary: ReportSummary
+    risk: RiskSummary
     findings: list[Finding]
 
 
@@ -155,3 +169,62 @@ class ExecutionTrace(StrictModel):
     events: list[TraceEvent]
     summary: TraceSummary
     trace_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class ScenarioExpectation(StrictModel):
+    outcome: Literal["allow", "deny", "approval_required", "error"]
+    call_executed: bool
+    minimum_redactions: int = Field(default=0, ge=0)
+    matched_rules: list[str] = Field(default_factory=list)
+
+
+class ScenarioCase(StrictModel):
+    id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{0,63}$")
+    title: str
+    category: str = Field(min_length=1)
+    tool: str
+    arguments: dict[str, Any] = Field(default_factory=dict)
+    approved: bool = False
+    expect: ScenarioExpectation
+
+
+class ScenarioSuite(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    name: str
+    description: str
+    cases: list[ScenarioCase] = Field(min_length=1)
+
+
+class ScenarioCheck(StrictModel):
+    name: str
+    passed: bool
+    expected: Any = None
+    observed: Any = None
+
+
+class ScenarioCaseResult(StrictModel):
+    id: str
+    title: str
+    category: str
+    passed: bool
+    trace_file: str
+    trace_id: str
+    checks: list[ScenarioCheck]
+
+
+class ScenarioSummary(StrictModel):
+    passed: int = Field(ge=0)
+    failed: int = Field(ge=0)
+    total: int = Field(ge=0)
+    score_percent: float = Field(ge=0, le=100)
+    category_scores: dict[str, float]
+
+
+class ScenarioReport(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    suite_name: str
+    generated_at: str
+    server: ServerIdentity
+    passed: bool
+    summary: ScenarioSummary
+    results: list[ScenarioCaseResult]

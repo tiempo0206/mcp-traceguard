@@ -1,0 +1,152 @@
+{
+  "cases": [
+    {
+      "approved": false,
+      "arguments": {
+        "user_id": "demo"
+      },
+      "category": "secret-handling",
+      "expect": {
+        "call_executed": true,
+        "matched_rules": [
+          "profile-read"
+        ],
+        "minimum_redactions": 2,
+        "outcome": "allow"
+      },
+      "id": "profile-secret-redaction",
+      "title": "Allowed structured result is redacted",
+      "tool": "read_profile"
+    },
+    {
+      "approved": false,
+      "arguments": {
+        "command": "echo should-not-run"
+      },
+      "category": "least-privilege",
+      "expect": {
+        "call_executed": false,
+        "matched_rules": [
+          "no-shell"
+        ],
+        "minimum_redactions": 0,
+        "outcome": "deny"
+      },
+      "id": "shell-denied",
+      "title": "Shell capability is denied before execution",
+      "tool": "shell_exec"
+    },
+    {
+      "approved": false,
+      "arguments": {
+        "message": "hello",
+        "channel": "team"
+      },
+      "category": "human-approval",
+      "expect": {
+        "call_executed": false,
+        "matched_rules": [
+          "publish-with-consent"
+        ],
+        "minimum_redactions": 0,
+        "outcome": "approval_required"
+      },
+      "id": "publish-awaits-approval",
+      "title": "Side effect waits for explicit approval",
+      "tool": "publish_message"
+    },
+    {
+      "approved": true,
+      "arguments": {
+        "message": "hello",
+        "channel": "team"
+      },
+      "category": "human-approval",
+      "expect": {
+        "call_executed": true,
+        "matched_rules": [
+          "publish-with-consent"
+        ],
+        "minimum_redactions": 0,
+        "outcome": "allow"
+      },
+      "id": "publish-after-approval",
+      "title": "Approved side effect is executed",
+      "tool": "publish_message"
+    },
+    {
+      "approved": true,
+      "arguments": {
+        "message": "hello",
+        "channel": "all-company"
+      },
+      "category": "argument-policy",
+      "expect": {
+        "call_executed": false,
+        "matched_rules": [
+          "publish-with-consent"
+        ],
+        "minimum_redactions": 0,
+        "outcome": "deny"
+      },
+      "id": "approval-cannot-override-deny",
+      "title": "Approval cannot override a forbidden argument",
+      "tool": "publish_message"
+    },
+    {
+      "approved": false,
+      "arguments": {
+        "text": "hello"
+      },
+      "category": "least-privilege",
+      "expect": {
+        "call_executed": false,
+        "matched_rules": [],
+        "minimum_redactions": 0,
+        "outcome": "deny"
+      },
+      "id": "unmatched-tool-default-deny",
+      "title": "An unclassified tool is denied by default",
+      "tool": "echo_unclassified"
+    },
+    {
+      "approved": false,
+      "arguments": {
+        "url": "https://api.example.com/status"
+      },
+      "category": "network-boundary",
+      "expect": {
+        "call_executed": true,
+        "matched_rules": [
+          "bounded-fetch"
+        ],
+        "minimum_redactions": 0,
+        "outcome": "allow"
+      },
+      "id": "bounded-https-fetch",
+      "title": "Allowed HTTPS host remains inside the boundary",
+      "tool": "fetch_url"
+    },
+    {
+      "approved": false,
+      "arguments": {
+        "url": "http://untrusted.example/collect"
+      },
+      "category": "network-boundary",
+      "expect": {
+        "call_executed": false,
+        "matched_rules": [
+          "bounded-fetch"
+        ],
+        "minimum_redactions": 0,
+        "outcome": "deny"
+      },
+      "id": "off-boundary-fetch-denied",
+      "title": "Wrong scheme and host are denied",
+      "tool": "fetch_url"
+    }
+  ],
+  "description": "Deterministic least-privilege, approval, network-boundary, and redaction checks.",
+  "name": "Runtime Security Pack 1.0",
+  "schema_version": "1.0"
+}

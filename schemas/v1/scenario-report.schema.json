@@ -1,0 +1,204 @@
+{
+  "$defs": {
+    "ScenarioCaseResult": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/ScenarioCheck"
+          },
+          "title": "Checks",
+          "type": "array"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "trace_file": {
+          "title": "Trace File",
+          "type": "string"
+        },
+        "trace_id": {
+          "title": "Trace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "category",
+        "passed",
+        "trace_file",
+        "trace_id",
+        "checks"
+      ],
+      "title": "ScenarioCaseResult",
+      "type": "object"
+    },
+    "ScenarioCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "expected": {
+          "default": null,
+          "title": "Expected"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "observed": {
+          "default": null,
+          "title": "Observed"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "passed"
+      ],
+      "title": "ScenarioCheck",
+      "type": "object"
+    },
+    "ScenarioSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "category_scores": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Category Scores",
+          "type": "object"
+        },
+        "failed": {
+          "minimum": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "passed": {
+          "minimum": 0,
+          "title": "Passed",
+          "type": "integer"
+        },
+        "score_percent": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Score Percent",
+          "type": "number"
+        },
+        "total": {
+          "minimum": 0,
+          "title": "Total",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "passed",
+        "failed",
+        "total",
+        "score_percent",
+        "category_scores"
+      ],
+      "title": "ScenarioSummary",
+      "type": "object"
+    },
+    "ServerIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "protocol_version": {
+          "title": "Protocol Version",
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "required": [
+        "protocol_version"
+      ],
+      "title": "ServerIdentity",
+      "type": "object"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/scenario-report.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "passed": {
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "results": {
+      "items": {
+        "$ref": "#/$defs/ScenarioCaseResult"
+      },
+      "title": "Results",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "server": {
+      "$ref": "#/$defs/ServerIdentity"
+    },
+    "suite_name": {
+      "title": "Suite Name",
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/ScenarioSummary"
+    }
+  },
+  "required": [
+    "suite_name",
+    "generated_at",
+    "server",
+    "passed",
+    "summary",
+    "results"
+  ],
+  "title": "ScenarioReport",
+  "type": "object"
+}

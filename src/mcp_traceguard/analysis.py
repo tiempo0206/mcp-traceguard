@@ -10,6 +10,8 @@ from mcp_traceguard.models import (
     Finding,
     Policy,
     ReportSummary,
+    RiskContribution,
+    RiskSummary,
     ToolCatalogSnapshot,
     ToolContract,
 )
@@ -130,6 +132,54 @@ def _policy_findings(snapshot: ToolCatalogSnapshot, policy: Policy) -> list[Find
     return findings
 
 
+def _risk_summary(findings: list[Finding]) -> RiskSummary:
+    fixed_points = {
+        "TG001": 25,
+        "TG002": 30,
+        "TG003": 5,
+        "TG004": 8,
+        "TG101": 25,
+        "TG102": 3,
+    }
+    contributions: list[RiskContribution] = []
+    for finding in findings:
+        if finding.rule_id == "TG103":
+            counts = finding.details.get("impact_counts", {})
+            points = min(
+                40,
+                int(counts.get("broadening", 0)) * 12
+                + int(counts.get("behavioral", 0)) * 10
+                + int(counts.get("metadata", 0)) * 3
+                + int(counts.get("narrowing", 0)) * 2,
+            )
+            reason = "Weighted contract-drift impact"
+        else:
+            points = fixed_points.get(finding.rule_id, 10 if finding.severity == "error" else 3)
+            reason = finding.message
+        if points:
+            contributions.append(
+                RiskContribution(
+                    rule_id=finding.rule_id,
+                    tool=finding.tool,
+                    points=points,
+                    reason=reason,
+                )
+            )
+    score = min(100, sum(item.points for item in contributions))
+    rating = (
+        "none"
+        if score == 0
+        else "low"
+        if score < 25
+        else "moderate"
+        if score < 50
+        else "high"
+        if score < 75
+        else "critical"
+    )
+    return RiskSummary(score=score, rating=rating, contributions=contributions)
+
+
 def analyze_snapshot(
     current: ToolCatalogSnapshot,
     *,
@@ -155,5 +205,6 @@ def analyze_snapshot(
         passed=passed,
         fail_on=policy.fail_on,
         summary=ReportSummary(errors=errors, warnings=warnings, total=len(findings)),
+        risk=_risk_summary(findings),
         findings=findings,
     )

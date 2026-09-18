@@ -68,6 +68,79 @@
       ],
       "title": "ReportSummary",
       "type": "object"
+    },
+    "RiskContribution": {
+      "additionalProperties": false,
+      "properties": {
+        "points": {
+          "minimum": 0,
+          "title": "Points",
+          "type": "integer"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool"
+        }
+      },
+      "required": [
+        "rule_id",
+        "points",
+        "reason"
+      ],
+      "title": "RiskContribution",
+      "type": "object"
+    },
+    "RiskSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "contributions": {
+          "items": {
+            "$ref": "#/$defs/RiskContribution"
+          },
+          "title": "Contributions",
+          "type": "array"
+        },
+        "rating": {
+          "enum": [
+            "none",
+            "low",
+            "moderate",
+            "high",
+            "critical"
+          ],
+          "title": "Rating",
+          "type": "string"
+        },
+        "score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Score",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "score",
+        "rating",
+        "contributions"
+      ],
+      "title": "RiskSummary",
+      "type": "object"
     }
   },
   "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/report.schema.json",
@@ -114,6 +187,9 @@
       "title": "Passed",
       "type": "boolean"
     },
+    "risk": {
+      "$ref": "#/$defs/RiskSummary"
+    },
     "schema_version": {
       "const": "1.0",
       "default": "1.0",
@@ -130,6 +206,7 @@
     "passed",
     "fail_on",
     "summary",
+    "risk",
     "findings"
   ],
   "title": "AnalysisReport",
