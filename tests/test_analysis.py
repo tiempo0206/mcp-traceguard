@@ -40,6 +40,9 @@ def test_added_and_changed_tools_fail_baseline() -> None:
     )
     assert not report.passed
     assert {finding.rule_id for finding in report.findings} == {"TG101", "TG103"}
+    changed = next(finding for finding in report.findings if finding.rule_id == "TG103")
+    assert changed.details["changes"][0]["path"] == "/description"
+    assert changed.details["impact_counts"]["metadata"] == 1
 
 
 def test_allowlist_and_denied_pattern_are_independent_findings() -> None:

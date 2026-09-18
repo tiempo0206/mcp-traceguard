@@ -20,6 +20,7 @@ jobs:
       - run: ruff format --check .
       - run: ruff check .
       - run: pytest
+      - run: mcp-traceguard export-schemas --output-dir /tmp/schemas
       - name: End-to-end CLI smoke test
         run: |
           mcp-traceguard snapshot \
@@ -38,4 +39,3 @@ jobs:
             echo "expected the drifted server check to fail"
             exit 1
           fi
-

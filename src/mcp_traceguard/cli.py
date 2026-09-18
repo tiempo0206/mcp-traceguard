@@ -12,6 +12,7 @@ from typing import Any
 from mcp import StdioServerParameters
 
 from mcp_traceguard.analysis import analyze_snapshot
+from mcp_traceguard.artifact_schemas import export_artifact_schemas
 from mcp_traceguard.models import Policy
 from mcp_traceguard.snapshot import capture_snapshot, load_snapshot, write_json
 
@@ -56,6 +57,10 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("--current-output", type=Path)
     check.add_argument("--force", action="store_true")
     _add_target_arguments(check)
+
+    schemas = subparsers.add_parser("export-schemas", help="Write versioned artifact schemas")
+    schemas.add_argument("--output-dir", type=Path, default=Path("schemas/v1"))
+    schemas.add_argument("--force", action="store_true")
     return parser
 
 
@@ -93,7 +98,14 @@ def main(argv: list[str] | None = None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
-        code = _snapshot_command(args) if args.subcommand == "snapshot" else _check_command(args)
+        if args.subcommand == "snapshot":
+            code = _snapshot_command(args)
+        elif args.subcommand == "check":
+            code = _check_command(args)
+        else:
+            written = export_artifact_schemas(args.output_dir, force=args.force)
+            print(f"Wrote {len(written)} schemas to {args.output_dir}")
+            code = 0
     except (FileExistsError, OSError, ValueError) as error:
         parser.exit(2, f"error: {error}\n")
     raise SystemExit(code)

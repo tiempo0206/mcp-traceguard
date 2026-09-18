@@ -45,6 +45,15 @@ class Policy(StrictModel):
     fail_on: Literal["warning", "error", "never"] = "error"
 
 
+class ContractChange(StrictModel):
+    path: str
+    kind: Literal["added", "removed", "changed"]
+    impact: Literal["broadening", "narrowing", "behavioral", "metadata"]
+    before: Any = None
+    after: Any = None
+    explanation: str
+
+
 class Finding(StrictModel):
     rule_id: str
     severity: Literal["warning", "error"]

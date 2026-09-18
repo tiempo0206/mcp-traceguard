@@ -1,0 +1,57 @@
+{
+  "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_tools": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Allowed Tools"
+    },
+    "denied_name_patterns": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Denied Name Patterns",
+      "type": "array"
+    },
+    "fail_on": {
+      "default": "error",
+      "enum": [
+        "warning",
+        "error",
+        "never"
+      ],
+      "title": "Fail On",
+      "type": "string"
+    },
+    "require_closed_input_schemas": {
+      "default": false,
+      "title": "Require Closed Input Schemas",
+      "type": "boolean"
+    },
+    "require_descriptions": {
+      "default": true,
+      "title": "Require Descriptions",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "title": "Policy",
+  "type": "object"
+}

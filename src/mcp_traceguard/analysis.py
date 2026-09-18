@@ -13,6 +13,7 @@ from mcp_traceguard.models import (
     ToolCatalogSnapshot,
     ToolContract,
 )
+from mcp_traceguard.schema_diff import diff_tool_contract
 
 
 def _now() -> str:
@@ -58,13 +59,22 @@ def _baseline_findings(
         before = baseline_by_name[name]
         after = current_by_name[name]
         if before.fingerprint != after.fingerprint:
+            changes = diff_tool_contract(before, after)
+            impact_counts = {
+                impact: sum(change.impact == impact for change in changes)
+                for impact in ("broadening", "narrowing", "behavioral", "metadata")
+            }
             findings.append(
                 Finding(
                     rule_id="TG103",
                     severity="error",
                     tool=name,
                     message=f"Tool {name!r} changed its advertised contract",
-                    details={"changed_fields": _changed_fields(before, after)},
+                    details={
+                        "changed_fields": _changed_fields(before, after),
+                        "impact_counts": impact_counts,
+                        "changes": [change.model_dump(mode="json") for change in changes],
+                    },
                 )
             )
     return findings

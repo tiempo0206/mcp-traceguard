@@ -75,6 +75,13 @@ name, added tool, and changed contract.
 Use `--url https://example.com/mcp` instead of the command after `--` to inspect
 a Streamable HTTP server.
 
+The committed JSON Schemas under `schemas/v1` are generated from the same strict
+models used at runtime. Regenerate them after an intentional contract change:
+
+```bash
+mcp-traceguard export-schemas --output-dir schemas/v1 --force
+```
+
 ## Why this is separate from EvalMerge
 
 EvalMerge focuses on offline human review of LLM evaluation results. MCP

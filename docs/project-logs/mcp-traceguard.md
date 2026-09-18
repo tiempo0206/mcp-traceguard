@@ -51,3 +51,35 @@ contract.
 
 Add field-level JSON Schema diffs so a finding explains whether a change widened
 accepted inputs, altered a description, or changed output guarantees.
+
+## 2026-09-18 — Day 1 continued: explainable contract drift
+
+### Goal
+
+Replace opaque "hash changed" alerts with evidence a reviewer can understand
+and later render in SARIF and the browser viewer.
+
+### Work completed
+
+- Added deterministic JSON-Pointer-addressed contract changes.
+- Classified changes as capability broadening, narrowing, behavioral, or
+  metadata impact.
+- Explained property, required-field, enum, JSON type, additional-property,
+  numeric, length, item-count, title, description, and annotation changes.
+- Embedded individual changes and impact counts in `TG103` findings.
+- Added strict Draft 2020-12 JSON Schemas for snapshots, policies, and reports.
+- Added an export command and a regression test that fails if committed schemas
+  drift from runtime Pydantic models.
+
+### Verification
+
+- Ruff format and lint: passed.
+- Pytest: 12 tests passed.
+- Negative stdio fixture still fails with the expected four findings.
+- The changed-description finding now identifies `/description`, preserves old
+  and new values, and classifies the change as metadata impact.
+
+### Next task
+
+Build the runtime policy layer and a tamper-evident, secret-redacted call trace
+so TraceGuard can test what a server does in addition to what it advertises.
