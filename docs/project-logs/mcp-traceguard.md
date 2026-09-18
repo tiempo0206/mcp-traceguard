@@ -44,7 +44,8 @@ contract.
 - Negative stdio smoke test: returned the expected exit status `1` with four
   findings: an allowlist violation, a denied name, a newly added tool, and a
   changed description.
-- GitHub commit and CI links will be recorded after the initial push.
+- Initial implementation commit: [`020a883`](https://github.com/tiempo0206/mcp-traceguard/commit/020a88380f70bd9133b15a8698fb2ec0d2c38a8a).
+- First GitHub Actions run: [all checks passed](https://github.com/tiempo0206/mcp-traceguard/actions/runs/35325518074).
 
 ### Next task
 
