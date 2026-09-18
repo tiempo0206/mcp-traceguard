@@ -1,0 +1,41 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: ruff format --check .
+      - run: ruff check .
+      - run: pytest
+      - name: End-to-end CLI smoke test
+        run: |
+          mcp-traceguard snapshot \
+            --output /tmp/baseline.json \
+            -- python examples/demo_server.py
+          mcp-traceguard check \
+            --baseline /tmp/baseline.json \
+            --policy examples/traceguard.policy.json \
+            --report /tmp/report.json \
+            -- python examples/demo_server.py
+          if mcp-traceguard check \
+            --baseline /tmp/baseline.json \
+            --policy examples/traceguard.policy.json \
+            --report /tmp/drift-report.json \
+            -- python examples/drifted_server.py; then
+            echo "expected the drifted server check to fail"
+            exit 1
+          fi
+

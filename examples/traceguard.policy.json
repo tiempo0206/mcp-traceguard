@@ -1,0 +1,14 @@
+{
+  "allowed_tools": [
+    "read_note",
+    "write_note"
+  ],
+  "denied_name_patterns": [
+    "(^|_)(delete|drop|exec|shell)(_|$)"
+  ],
+  "fail_on": "error",
+  "require_closed_input_schemas": false,
+  "require_descriptions": true,
+  "schema_version": "1.0"
+}
+
