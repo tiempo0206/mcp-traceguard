@@ -36,6 +36,42 @@ class ToolCatalogSnapshot(StrictModel):
     tools: list[ToolContract]
 
 
+class RedactionPolicy(StrictModel):
+    sensitive_key_patterns: list[str] = Field(
+        default_factory=lambda: [
+            r"(?i)(^|[-_])(api[-_]?key|authorization|cookie|password|secret|token)([-_]|$)"
+        ]
+    )
+    replacement: str = "[REDACTED]"
+    max_string_length: int = Field(default=2048, ge=32, le=1_000_000)
+
+
+class RuntimeCondition(StrictModel):
+    path: str = Field(pattern=r"^(/([^/~]|~[01])*)*$")
+    operator: Literal[
+        "exists",
+        "equals",
+        "not_equals",
+        "matches",
+        "not_matches",
+        "in",
+        "not_in",
+        "url_scheme_not_in",
+        "url_host_not_in",
+    ]
+    value: Any = None
+    action: Literal["deny", "require_approval"] = "deny"
+    reason: str
+
+
+class RuntimeRule(StrictModel):
+    id: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_.-]{0,63}$")
+    tool_pattern: str
+    action: Literal["allow", "deny", "require_approval"] = "allow"
+    reason: str
+    conditions: list[RuntimeCondition] = Field(default_factory=list)
+
+
 class Policy(StrictModel):
     schema_version: Literal["1.0"] = "1.0"
     allowed_tools: list[str] | None = None
@@ -43,6 +79,9 @@ class Policy(StrictModel):
     require_descriptions: bool = True
     require_closed_input_schemas: bool = False
     fail_on: Literal["warning", "error", "never"] = "error"
+    default_runtime_action: Literal["allow", "deny", "require_approval"] = "deny"
+    runtime_rules: list[RuntimeRule] = Field(default_factory=list)
+    redaction: RedactionPolicy = Field(default_factory=RedactionPolicy)
 
 
 class ContractChange(StrictModel):
@@ -77,3 +116,42 @@ class AnalysisReport(StrictModel):
     fail_on: Literal["warning", "error", "never"]
     summary: ReportSummary
     findings: list[Finding]
+
+
+class RuntimeDecision(StrictModel):
+    outcome: Literal["allow", "deny", "approval_required"]
+    approved: bool = False
+    matched_rules: list[str] = Field(default_factory=list)
+    reasons: list[str] = Field(default_factory=list)
+
+
+class TraceEvent(StrictModel):
+    sequence: int = Field(ge=0)
+    timestamp: str
+    event_type: Literal["catalog", "request", "decision", "response", "error"]
+    tool: str | None = None
+    payload: dict[str, Any] = Field(default_factory=dict)
+    previous_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    event_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class TraceSummary(StrictModel):
+    outcome: Literal["allow", "deny", "approval_required", "error"]
+    call_executed: bool
+    response_is_error: bool | None = None
+    redaction_count: int = Field(ge=0)
+    event_count: int = Field(ge=0)
+    duration_ms: float = Field(ge=0)
+
+
+class ExecutionTrace(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    trace_id: str
+    started_at: str
+    completed_at: str
+    server: ServerIdentity
+    tool: str
+    integrity: Literal["sha256-chain-v1"] = "sha256-chain-v1"
+    events: list[TraceEvent]
+    summary: TraceSummary
+    trace_hash: str = Field(pattern=r"^[0-9a-f]{64}$")

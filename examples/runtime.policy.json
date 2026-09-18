@@ -1,0 +1,54 @@
+{
+  "allowed_tools": [
+    "publish_message",
+    "read_profile",
+    "shell_exec"
+  ],
+  "default_runtime_action": "deny",
+  "denied_name_patterns": [
+    "(^|_)(exec|shell)(_|$)"
+  ],
+  "fail_on": "error",
+  "redaction": {
+    "max_string_length": 2048,
+    "replacement": "[REDACTED]",
+    "sensitive_key_patterns": [
+      "(?i)(^|[-_])(api[-_]?key|authorization|cookie|password|secret|token)([-_]|$)"
+    ]
+  },
+  "require_closed_input_schemas": false,
+  "require_descriptions": true,
+  "runtime_rules": [
+    {
+      "action": "allow",
+      "conditions": [],
+      "id": "profile-read",
+      "reason": "The deterministic profile fixture is read-only",
+      "tool_pattern": "read_profile"
+    },
+    {
+      "action": "require_approval",
+      "conditions": [
+        {
+          "action": "deny",
+          "operator": "matches",
+          "path": "/channel",
+          "reason": "Publishing to the all-company channel is forbidden",
+          "value": "^all-company$"
+        }
+      ],
+      "id": "publish-with-consent",
+      "reason": "Publishing has an external side-effect in a real server",
+      "tool_pattern": "publish_message"
+    },
+    {
+      "action": "deny",
+      "conditions": [],
+      "id": "no-shell",
+      "reason": "Shell execution exceeds this client's capability boundary",
+      "tool_pattern": "shell_exec"
+    }
+  ],
+  "schema_version": "1.0"
+}
+

@@ -22,6 +22,9 @@ an API key.
 - policy checks for tool allowlists, denied names, missing descriptions, and
   open input objects;
 - baseline checks for added, removed, and changed tools;
+- pre-call runtime policy decisions with explicit human-approval gates;
+- recursive secret redaction and bounded trace values;
+- tamper-evident SHA-256 event chains with offline verification;
 - atomic output writes with overwrite protection; and
 - a CI-friendly exit code plus machine-readable JSON report.
 
@@ -81,6 +84,22 @@ models used at runtime. Regenerate them after an intentional contract change:
 ```bash
 mcp-traceguard export-schemas --output-dir schemas/v1 --force
 ```
+
+Guard one real tool call and preserve a local trace:
+
+```bash
+mcp-traceguard call \
+  --tool read_profile \
+  --arguments '{"user_id":"demo"}' \
+  --policy examples/runtime.policy.json \
+  --trace artifacts/profile.trace.json \
+  -- python examples/runtime_server.py
+
+mcp-traceguard verify-trace artifacts/profile.trace.json
+```
+
+The fake `api_token` returned by the fixture is replaced with `[REDACTED]`
+before persistence. A denied or unapproved call is not sent to the server.
 
 ## Why this is separate from EvalMerge
 

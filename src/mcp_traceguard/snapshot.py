@@ -55,28 +55,33 @@ def build_tool_contract(tool: Any) -> ToolContract:
     return ToolContract(**contract, fingerprint=digest)
 
 
+async def capture_from_client(client: Client) -> ToolCatalogSnapshot:
+    """Collect every paginated tool definition from an entered client."""
+
+    tools: list[Any] = []
+    cursor: str | None = None
+    while True:
+        page = await client.list_tools(cursor=cursor) if cursor else await client.list_tools()
+        tools.extend(page.tools)
+        cursor = page.next_cursor
+        if cursor is None:
+            break
+
+    server_info = client.server_info
+    identity = ServerIdentity(
+        name=getattr(server_info, "name", None),
+        version=getattr(server_info, "version", None),
+        protocol_version=str(client.protocol_version),
+    )
+    contracts = sorted((build_tool_contract(tool) for tool in tools), key=lambda tool: tool.name)
+    return ToolCatalogSnapshot(captured_at=utc_now(), server=identity, tools=contracts)
+
+
 async def capture_snapshot(target: Any) -> ToolCatalogSnapshot:
     """Connect to an MCP target and collect every paginated tool definition."""
 
     async with Client(target) as client:
-        tools: list[Any] = []
-        cursor: str | None = None
-        while True:
-            page = await client.list_tools(cursor=cursor) if cursor else await client.list_tools()
-            tools.extend(page.tools)
-            cursor = page.next_cursor
-            if cursor is None:
-                break
-
-        server_info = client.server_info
-        identity = ServerIdentity(
-            name=getattr(server_info, "name", None),
-            version=getattr(server_info, "version", None),
-            protocol_version=str(client.protocol_version),
-        )
-
-    contracts = sorted((build_tool_contract(tool) for tool in tools), key=lambda tool: tool.name)
-    return ToolCatalogSnapshot(captured_at=utc_now(), server=identity, tools=contracts)
+        return await capture_from_client(client)
 
 
 def write_json(path: Path, value: Any, *, force: bool = False) -> None:

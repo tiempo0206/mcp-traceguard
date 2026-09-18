@@ -39,3 +39,10 @@ jobs:
             echo "expected the drifted server check to fail"
             exit 1
           fi
+          mcp-traceguard call \
+            --tool read_profile \
+            --arguments '{"user_id":"ci-demo"}' \
+            --policy examples/runtime.policy.json \
+            --trace /tmp/profile.trace.json \
+            -- python examples/runtime_server.py
+          mcp-traceguard verify-trace /tmp/profile.trace.json

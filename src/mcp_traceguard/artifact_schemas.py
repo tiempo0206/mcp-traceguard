@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from mcp_traceguard.models import AnalysisReport, Policy, ToolCatalogSnapshot
+from mcp_traceguard.models import AnalysisReport, ExecutionTrace, Policy, ToolCatalogSnapshot
 from mcp_traceguard.snapshot import write_json
 
 SCHEMA_BASE = "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1"
@@ -15,6 +15,7 @@ SCHEMA_MODELS: dict[str, type[BaseModel]] = {
     "policy.schema.json": Policy,
     "report.schema.json": AnalysisReport,
     "snapshot.schema.json": ToolCatalogSnapshot,
+    "trace.schema.json": ExecutionTrace,
 }
 
 

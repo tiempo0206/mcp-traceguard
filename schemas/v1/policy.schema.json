@@ -1,4 +1,123 @@
 {
+  "$defs": {
+    "RedactionPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "max_string_length": {
+          "default": 2048,
+          "maximum": 1000000,
+          "minimum": 32,
+          "title": "Max String Length",
+          "type": "integer"
+        },
+        "replacement": {
+          "default": "[REDACTED]",
+          "title": "Replacement",
+          "type": "string"
+        },
+        "sensitive_key_patterns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sensitive Key Patterns",
+          "type": "array"
+        }
+      },
+      "title": "RedactionPolicy",
+      "type": "object"
+    },
+    "RuntimeCondition": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "default": "deny",
+          "enum": [
+            "deny",
+            "require_approval"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "exists",
+            "equals",
+            "not_equals",
+            "matches",
+            "not_matches",
+            "in",
+            "not_in",
+            "url_scheme_not_in",
+            "url_host_not_in"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^(/([^/~]|~[01])*)*$",
+          "title": "Path",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "path",
+        "operator",
+        "reason"
+      ],
+      "title": "RuntimeCondition",
+      "type": "object"
+    },
+    "RuntimeRule": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "default": "allow",
+          "enum": [
+            "allow",
+            "deny",
+            "require_approval"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/$defs/RuntimeCondition"
+          },
+          "title": "Conditions",
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,63}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "tool_pattern": {
+          "title": "Tool Pattern",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "tool_pattern",
+        "reason"
+      ],
+      "title": "RuntimeRule",
+      "type": "object"
+    }
+  },
   "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/policy.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
@@ -18,6 +137,16 @@
       "default": null,
       "title": "Allowed Tools"
     },
+    "default_runtime_action": {
+      "default": "deny",
+      "enum": [
+        "allow",
+        "deny",
+        "require_approval"
+      ],
+      "title": "Default Runtime Action",
+      "type": "string"
+    },
     "denied_name_patterns": {
       "items": {
         "type": "string"
@@ -35,6 +164,9 @@
       "title": "Fail On",
       "type": "string"
     },
+    "redaction": {
+      "$ref": "#/$defs/RedactionPolicy"
+    },
     "require_closed_input_schemas": {
       "default": false,
       "title": "Require Closed Input Schemas",
@@ -44,6 +176,13 @@
       "default": true,
       "title": "Require Descriptions",
       "type": "boolean"
+    },
+    "runtime_rules": {
+      "items": {
+        "$ref": "#/$defs/RuntimeRule"
+      },
+      "title": "Runtime Rules",
+      "type": "array"
     },
     "schema_version": {
       "const": "1.0",

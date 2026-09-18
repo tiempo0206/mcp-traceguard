@@ -1,0 +1,221 @@
+{
+  "$defs": {
+    "ServerIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "protocol_version": {
+          "title": "Protocol Version",
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "required": [
+        "protocol_version"
+      ],
+      "title": "ServerIdentity",
+      "type": "object"
+    },
+    "TraceEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "event_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Event Hash",
+          "type": "string"
+        },
+        "event_type": {
+          "enum": [
+            "catalog",
+            "request",
+            "decision",
+            "response",
+            "error"
+          ],
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        },
+        "previous_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Previous Hash",
+          "type": "string"
+        },
+        "sequence": {
+          "minimum": 0,
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "tool": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool"
+        }
+      },
+      "required": [
+        "sequence",
+        "timestamp",
+        "event_type",
+        "previous_hash",
+        "event_hash"
+      ],
+      "title": "TraceEvent",
+      "type": "object"
+    },
+    "TraceSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "call_executed": {
+          "title": "Call Executed",
+          "type": "boolean"
+        },
+        "duration_ms": {
+          "minimum": 0,
+          "title": "Duration Ms",
+          "type": "number"
+        },
+        "event_count": {
+          "minimum": 0,
+          "title": "Event Count",
+          "type": "integer"
+        },
+        "outcome": {
+          "enum": [
+            "allow",
+            "deny",
+            "approval_required",
+            "error"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "redaction_count": {
+          "minimum": 0,
+          "title": "Redaction Count",
+          "type": "integer"
+        },
+        "response_is_error": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Is Error"
+        }
+      },
+      "required": [
+        "outcome",
+        "call_executed",
+        "redaction_count",
+        "event_count",
+        "duration_ms"
+      ],
+      "title": "TraceSummary",
+      "type": "object"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/trace.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "completed_at": {
+      "title": "Completed At",
+      "type": "string"
+    },
+    "events": {
+      "items": {
+        "$ref": "#/$defs/TraceEvent"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "integrity": {
+      "const": "sha256-chain-v1",
+      "default": "sha256-chain-v1",
+      "title": "Integrity",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "server": {
+      "$ref": "#/$defs/ServerIdentity"
+    },
+    "started_at": {
+      "title": "Started At",
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/TraceSummary"
+    },
+    "tool": {
+      "title": "Tool",
+      "type": "string"
+    },
+    "trace_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Trace Hash",
+      "type": "string"
+    },
+    "trace_id": {
+      "title": "Trace Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "trace_id",
+    "started_at",
+    "completed_at",
+    "server",
+    "tool",
+    "events",
+    "summary",
+    "trace_hash"
+  ],
+  "title": "ExecutionTrace",
+  "type": "object"
+}

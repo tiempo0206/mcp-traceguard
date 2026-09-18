@@ -83,3 +83,43 @@ and later render in SARIF and the browser viewer.
 
 Build the runtime policy layer and a tamper-evident, secret-redacted call trace
 so TraceGuard can test what a server does in addition to what it advertises.
+
+## 2026-09-18 — Day 1 continued: guarded runtime traces
+
+### Goal
+
+Enforce a capability boundary before a real MCP tool call and retain useful
+evidence without persisting secrets.
+
+### Work completed
+
+- Added deny-by-default runtime rules with regex tool matching.
+- Added argument conditions for equality, regex, membership, URL schemes, and
+  URL hosts.
+- Implemented deny-over-approval precedence and an explicit `--approved` gate.
+- Ensured denied and unapproved calls never reach the MCP server.
+- Added recursive key-based redaction, embedded-JSON sanitization, binary
+  placeholders, and bounded text storage.
+- Added a `call` command that connects to a real MCP server, makes a policy
+  decision, conditionally invokes the tool, and writes an execution trace.
+- Chained every event to the previous event with SHA-256 and sealed metadata,
+  the event root, and summary in a final trace hash.
+- Added `verify-trace` and a versioned trace JSON Schema.
+- Added safe runtime fixtures for allow, approval, conditional deny, secret
+  redaction, and unconditional deny behavior.
+
+### Verification
+
+- Ruff format and lint: passed.
+- Pytest: 17 tests passed.
+- Allowed stdio call: four events, two redactions, trace verification passed,
+  and the fake token was absent from the persisted file.
+- Shell fixture: denied before execution.
+- Publish fixture: required approval, executed only with `--approved`, and was
+  still denied for the forbidden `all-company` channel.
+- Tampering with either an event or the summary is detected by verification.
+
+### Next task
+
+Turn individual guarded calls into versioned, replayable adversarial scenarios
+with expected outcomes and a deterministic benchmark score.
