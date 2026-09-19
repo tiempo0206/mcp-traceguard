@@ -329,6 +329,9 @@ on `PATH`.
   with the Python and Web jobs both passing.
 - Published tag and release:
   [`v1.0.0`](https://github.com/tiempo0206/mcp-traceguard/releases/tag/v1.0.0).
+- Upgraded SARIF artifact upload from `actions/upload-artifact@v4` to the
+  current Node 24-based `v7` after the successful release run surfaced the
+  platform's Node 20 retirement annotation.
 
 ### External contribution boundary
 
