@@ -332,6 +332,9 @@ on `PATH`.
 - Upgraded SARIF artifact upload from `actions/upload-artifact@v4` to the
   current Node 24-based `v7` after the successful release run surfaced the
   platform's Node 20 retirement annotation.
+- Pinned both CI jobs to `ubuntu-24.04` instead of the migrating
+  `ubuntu-latest` alias so benchmark and compatibility evidence keep an
+  explicit runner baseline.
 
 ### External contribution boundary
 
