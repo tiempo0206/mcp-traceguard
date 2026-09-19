@@ -13,7 +13,9 @@ installation entry while changing the tools and instructions presented to an
 agent. TraceGuard makes those changes reviewable and testable without an LLM or
 an API key.
 
-## First working slice
+![MCP TraceGuard Evidence Studio](docs/assets/evidence-studio.png)
+
+## What it ships
 
 - real MCP discovery over in-memory, stdio, or Streamable HTTP transports;
 - pagination-safe tool catalog capture;
@@ -25,8 +27,13 @@ an API key.
 - pre-call runtime policy decisions with explicit human-approval gates;
 - recursive secret redaction and bounded trace values;
 - tamper-evident SHA-256 event chains with offline verification;
-- atomic output writes with overwrite protection; and
-- a CI-friendly exit code plus machine-readable JSON report.
+- atomic output writes with overwrite protection;
+- a CI-friendly exit code plus machine-readable JSON report;
+- semantic JSON Schema diffs with JSON Pointer evidence and impact classes;
+- eight replayable adversarial scenarios with 40 observable checks;
+- deterministic risk scoring and GitHub-compatible SARIF 2.1.0;
+- reproducible 10–5,000-tool benchmarks with CI regression budgets; and
+- a responsive local Evidence Studio that independently verifies Python traces.
 
 ## Quick start
 
@@ -131,6 +138,66 @@ The CI workflow validates this path and preserves the SARIF file as a build
 artifact. Projects that want Security-tab alerts can upload the same file with
 `github/codeql-action/upload-sarif` and `security-events: write`.
 
+Run the reproducible catalog-scale benchmark:
+
+```bash
+mcp-traceguard benchmark \
+  --output benchmarks/results/catalog-scale.json \
+  --sizes 10 100 1000 5000 \
+  --trials 7 \
+  --force
+```
+
+It measures canonicalization and SHA-256 fingerprinting separately from policy
+and baseline analysis, reporting median and P95 time, throughput, artifact
+sizes, controlled changes, findings, and risk scores. Timing depends on the
+machine, so the result records its Python and platform environment.
+
+Enforce the portable regression budget used in CI:
+
+```bash
+mcp-traceguard benchmark-check \
+  --benchmark benchmarks/results/catalog-scale.json \
+  --budget benchmarks/catalog-budget.json \
+  --output /tmp/catalog-budget.report.json
+```
+
+## Local Evidence Studio
+
+The browser application renders every TraceGuard artifact without a backend:
+
+```bash
+cd web
+npm ci
+npm run dev
+```
+
+Open <http://127.0.0.1:5174>. You can drag in JSON evidence or load the bundled
+catalog, scenario, trace, benchmark, and baseline demos. The studio provides:
+
+- severity filtering and human-readable JSON Pointer contract diffs;
+- scenario category scorecards and per-check evidence;
+- independent browser verification of Python-generated trace hash chains;
+- responsive scale-benchmark tables;
+- localStorage-backed baseline approvals with SHA-256 receipts; and
+- import and rendering that remain entirely local to the browser.
+
+See [`docs/evidence-studio.md`](docs/evidence-studio.md) for the trust boundary
+and review workflow.
+
+## Documentation
+
+- [Tutorial](docs/tutorial.md): complete baseline, drift, call, replay, and UI workflow
+- [Architecture](docs/architecture.md): components, data flow, invariants, and extensions
+- [Threat model](docs/threat-model.md): addressed threats and explicit limitations
+- [Policy reference](docs/policy-reference.md): catalog and runtime semantics
+- [Protocol compatibility](docs/protocol-compatibility.md): tested transports and boundaries
+- [GitHub code scanning](docs/github-code-scanning.md): opt-in SARIF upload workflow
+- [Benchmarks](docs/benchmarks.md): methodology, results, and regression budgets
+- [Resume evidence](docs/resume.md): Chinese/English bullets and claim boundaries
+- [Upstream candidate](docs/upstream-contribution.md): reviewed issue proposal, not auto-submitted
+- [Project log](docs/project-logs/mcp-traceguard.md): chronological decisions and verification
+
 ## Why this is separate from EvalMerge
 
 EvalMerge focuses on offline human review of LLM evaluation results. MCP
@@ -143,10 +210,10 @@ See the [two-week roadmap](docs/roadmap.md) and the
 
 ## Status
 
-MCP TraceGuard is under active development. Version 0.1 establishes the
-capability baseline; runtime trace recording, adversarial scenario replay,
-SARIF export, a local evidence viewer, and published benchmarks are the next
-milestones.
+Version 1.0 is the complete portfolio release. Its scope is capability-contract
+testing and local audit evidence; it is not a process sandbox, authenticated
+ledger, DLP product, or full MCP conformance suite. See the threat model before
+using it with untrusted or production servers.
 
 ## License
 

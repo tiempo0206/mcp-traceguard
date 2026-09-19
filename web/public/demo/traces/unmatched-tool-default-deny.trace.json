@@ -1,0 +1,92 @@
+{
+  "completed_at": "2026-09-18T09:31:46.050699Z",
+  "events": [
+    {
+      "event_hash": "3e7f33b2c202939430961e5ab59c92d7cb88d0c479c8cfcc066306949f7900b9",
+      "event_type": "catalog",
+      "payload": {
+        "contract": {
+          "annotations": null,
+          "description": "Echo text for exercising the default runtime decision.",
+          "fingerprint": "3bad08355f3683d4c6d1cf6849cd58ead1f798c416725b23d8c2f84f4fb9807f",
+          "input_schema": {
+            "properties": {
+              "text": {
+                "title": "Text",
+                "type": "string"
+              }
+            },
+            "required": ["text"],
+            "title": "echo_unclassifiedArguments",
+            "type": "object"
+          },
+          "name": "echo_unclassified",
+          "output_schema": {
+            "properties": {
+              "result": {
+                "title": "Result",
+                "type": "string"
+              }
+            },
+            "required": ["result"],
+            "title": "echo_unclassifiedOutput",
+            "type": "object"
+          },
+          "title": null
+        },
+        "fingerprint": "3bad08355f3683d4c6d1cf6849cd58ead1f798c416725b23d8c2f84f4fb9807f"
+      },
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sequence": 0,
+      "timestamp": "2026-09-18T09:31:46.015878Z",
+      "tool": "echo_unclassified"
+    },
+    {
+      "event_hash": "b73b158f0555bf7938a640ba918115e159a23f3489893030e9ee00080c50d670",
+      "event_type": "request",
+      "payload": {
+        "arguments": {
+          "text": "hello"
+        },
+        "redacted_paths": []
+      },
+      "previous_hash": "3e7f33b2c202939430961e5ab59c92d7cb88d0c479c8cfcc066306949f7900b9",
+      "sequence": 1,
+      "timestamp": "2026-09-18T09:31:46.015910Z",
+      "tool": "echo_unclassified"
+    },
+    {
+      "event_hash": "f6b28923f73a6f1e4ac3b584950bf6bb2c89e0de6cf62f8e5bd350364f2594c2",
+      "event_type": "decision",
+      "payload": {
+        "approved": false,
+        "matched_rules": [],
+        "outcome": "deny",
+        "reasons": ["No runtime rule matched; default action is deny"]
+      },
+      "previous_hash": "b73b158f0555bf7938a640ba918115e159a23f3489893030e9ee00080c50d670",
+      "sequence": 2,
+      "timestamp": "2026-09-18T09:31:46.015928Z",
+      "tool": "echo_unclassified"
+    }
+  ],
+  "integrity": "sha256-chain-v1",
+  "schema_version": "1.0",
+  "server": {
+    "name": "TraceGuard Runtime Fixture",
+    "protocol_version": "2026-07-28",
+    "version": ""
+  },
+  "started_at": "2026-09-18T09:31:45.767154Z",
+  "summary": {
+    "call_executed": false,
+    "duration_ms": 283.538,
+    "event_count": 3,
+    "outcome": "deny",
+    "redaction_count": 0,
+    "response_is_error": null
+  },
+  "tool": "echo_unclassified",
+  "trace_hash": "d98a5d74c83aa972ad97279917c9f4ecefb996c242e27372689d46a458e33414",
+  "trace_id": "3aabdc34-66c7-4123-9585-125821857114"
+}

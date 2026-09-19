@@ -1,0 +1,92 @@
+{
+  "$defs": {
+    "BenchmarkBudgetViolation": {
+      "additionalProperties": false,
+      "properties": {
+        "actual": {
+          "title": "Actual",
+          "type": "number"
+        },
+        "limit": {
+          "title": "Limit",
+          "type": "number"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "<=",
+            ">="
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "tool_count": {
+          "exclusiveMinimum": 0,
+          "title": "Tool Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tool_count",
+        "metric",
+        "actual",
+        "operator",
+        "limit",
+        "message"
+      ],
+      "title": "BenchmarkBudgetViolation",
+      "type": "object"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/benchmark-budget-report.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_generated_at": {
+      "title": "Benchmark Generated At",
+      "type": "string"
+    },
+    "evaluated_limits": {
+      "minimum": 0,
+      "title": "Evaluated Limits",
+      "type": "integer"
+    },
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "passed": {
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "violations": {
+      "items": {
+        "$ref": "#/$defs/BenchmarkBudgetViolation"
+      },
+      "title": "Violations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "generated_at",
+    "benchmark_generated_at",
+    "passed",
+    "evaluated_limits",
+    "violations"
+  ],
+  "title": "BenchmarkBudgetReport",
+  "type": "object"
+}

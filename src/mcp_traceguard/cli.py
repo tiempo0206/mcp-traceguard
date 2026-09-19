@@ -11,9 +11,17 @@ from typing import Any
 
 from mcp import StdioServerParameters
 
+from mcp_traceguard import __version__
 from mcp_traceguard.analysis import analyze_snapshot
 from mcp_traceguard.artifact_schemas import export_artifact_schemas
-from mcp_traceguard.models import ExecutionTrace, Policy, ScenarioSuite
+from mcp_traceguard.benchmark import benchmark_catalog, check_benchmark_budget
+from mcp_traceguard.models import (
+    BenchmarkBudget,
+    CatalogBenchmarkReport,
+    ExecutionTrace,
+    Policy,
+    ScenarioSuite,
+)
 from mcp_traceguard.runtime import execute_guarded_call, verify_trace
 from mcp_traceguard.sarif import analysis_to_sarif
 from mcp_traceguard.scenarios import replay_suite
@@ -46,6 +54,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="mcp-traceguard",
         description="Deterministic capability-contract testing for MCP servers",
     )
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     subparsers = parser.add_subparsers(dest="subcommand", required=True)
 
     snapshot = subparsers.add_parser("snapshot", help="Capture an approved tool baseline")
@@ -95,6 +104,21 @@ def build_parser() -> argparse.ArgumentParser:
     sarif.add_argument("--artifact", default="mcp-server")
     sarif.add_argument("--automation-id", default="mcp-traceguard/catalog")
     sarif.add_argument("--force", action="store_true")
+
+    benchmark = subparsers.add_parser("benchmark", help="Benchmark catalog scale")
+    benchmark.add_argument("--output", type=Path, required=True)
+    benchmark.add_argument("--sizes", type=int, nargs="+", default=[10, 100, 1000, 5000])
+    benchmark.add_argument("--trials", type=int, default=7)
+    benchmark.add_argument("--warmups", type=int, default=2)
+    benchmark.add_argument("--force", action="store_true")
+
+    benchmark_check = subparsers.add_parser(
+        "benchmark-check", help="Check a catalog benchmark against regression budgets"
+    )
+    benchmark_check.add_argument("--benchmark", type=Path, required=True)
+    benchmark_check.add_argument("--budget", type=Path, required=True)
+    benchmark_check.add_argument("--output", type=Path)
+    benchmark_check.add_argument("--force", action="store_true")
     return parser
 
 
@@ -202,6 +226,49 @@ def _sarif_command(args: argparse.Namespace) -> int:
     return 0
 
 
+def _benchmark_command(args: argparse.Namespace) -> int:
+    report = benchmark_catalog(
+        sizes=args.sizes,
+        trials=args.trials,
+        warmups=args.warmups,
+    )
+    write_json(args.output, report, force=args.force)
+    for result in report.results:
+        print(
+            f"{result.tool_count:>5} tools | fingerprint {result.fingerprint.median_ms:>8.3f} ms "
+            f"| analysis {result.analysis.median_ms:>8.3f} ms "
+            f"| {result.fingerprint_tools_per_second:>10.2f} tools/s"
+        )
+    return 0
+
+
+def _benchmark_check_command(args: argparse.Namespace) -> int:
+    benchmark = CatalogBenchmarkReport.model_validate_json(
+        args.benchmark.read_text(encoding="utf-8")
+    )
+    budget = BenchmarkBudget.model_validate_json(args.budget.read_text(encoding="utf-8"))
+    report = check_benchmark_budget(benchmark, budget)
+    if args.output:
+        write_json(args.output, report, force=args.force)
+    if report.passed:
+        print(f"PASS: {report.evaluated_limits} benchmark budgets satisfied")
+        return 0
+    for violation in report.violations:
+        print(
+            f"FAIL: {violation.tool_count} tools: {violation.message}",
+            file=sys.stderr,
+        )
+    return 1
+
+
+def _exception_messages(error: BaseException) -> list[str]:
+    if isinstance(error, BaseExceptionGroup):
+        messages = [message for item in error.exceptions for message in _exception_messages(item)]
+        return list(dict.fromkeys(messages))
+    message = str(error).strip()
+    return [message or type(error).__name__]
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -220,9 +287,15 @@ def main(argv: list[str] | None = None) -> None:
             code = _verify_trace_command(args)
         elif args.subcommand == "replay":
             code = _replay_command(args)
-        else:
+        elif args.subcommand == "sarif":
             code = _sarif_command(args)
-    except (FileExistsError, OSError, ValueError) as error:
+        elif args.subcommand == "benchmark":
+            code = _benchmark_command(args)
+        else:
+            code = _benchmark_check_command(args)
+    except ExceptionGroup as error:
+        parser.exit(2, f"error: {'; '.join(_exception_messages(error))}\n")
+    except (FileExistsError, OSError, RuntimeError, ValueError) as error:
         parser.exit(2, f"error: {error}\n")
     raise SystemExit(code)
 

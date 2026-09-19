@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "description": "Portable regression ceilings for local CPU work. These are intentionally looser than the committed Apple Silicon measurements so GitHub-hosted runners can enforce them reliably.",
+  "limits": [
+    {
+      "tool_count": 10,
+      "max_fingerprint_median_ms": 10,
+      "max_analysis_median_ms": 10,
+      "min_fingerprint_tools_per_second": 1000,
+      "max_snapshot_bytes": 10000,
+      "max_report_bytes": 10000
+    },
+    {
+      "tool_count": 100,
+      "max_fingerprint_median_ms": 20,
+      "max_analysis_median_ms": 20,
+      "min_fingerprint_tools_per_second": 5000,
+      "max_snapshot_bytes": 75000,
+      "max_report_bytes": 20000
+    },
+    {
+      "tool_count": 1000,
+      "max_fingerprint_median_ms": 75,
+      "max_analysis_median_ms": 30,
+      "min_fingerprint_tools_per_second": 15000,
+      "max_snapshot_bytes": 600000,
+      "max_report_bytes": 50000
+    },
+    {
+      "tool_count": 5000,
+      "max_fingerprint_median_ms": 300,
+      "max_analysis_median_ms": 100,
+      "min_fingerprint_tools_per_second": 15000,
+      "max_snapshot_bytes": 3000000,
+      "max_report_bytes": 125000
+    }
+  ]
+}

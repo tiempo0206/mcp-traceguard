@@ -13,6 +13,7 @@ from typing import Any
 
 from mcp import Client
 
+from mcp_traceguard.connection import client_for_target
 from mcp_traceguard.models import ServerIdentity, ToolCatalogSnapshot, ToolContract
 
 
@@ -80,7 +81,7 @@ async def capture_from_client(client: Client) -> ToolCatalogSnapshot:
 async def capture_snapshot(target: Any) -> ToolCatalogSnapshot:
     """Connect to an MCP target and collect every paginated tool definition."""
 
-    async with Client(target) as client:
+    async with client_for_target(target) as client:
         return await capture_from_client(client)
 
 

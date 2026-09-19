@@ -9,6 +9,9 @@ from pydantic import BaseModel
 
 from mcp_traceguard.models import (
     AnalysisReport,
+    BenchmarkBudget,
+    BenchmarkBudgetReport,
+    CatalogBenchmarkReport,
     ExecutionTrace,
     Policy,
     ScenarioReport,
@@ -25,6 +28,9 @@ SCHEMA_MODELS: dict[str, type[BaseModel]] = {
     "trace.schema.json": ExecutionTrace,
     "scenario-suite.schema.json": ScenarioSuite,
     "scenario-report.schema.json": ScenarioReport,
+    "catalog-benchmark.schema.json": CatalogBenchmarkReport,
+    "benchmark-budget.schema.json": BenchmarkBudget,
+    "benchmark-budget-report.schema.json": BenchmarkBudgetReport,
 }
 
 

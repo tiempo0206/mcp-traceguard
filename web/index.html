@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Local evidence viewer for MCP TraceGuard reports, traces, scenarios, and baselines."
+    />
+    <title>MCP TraceGuard Evidence Studio</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="MCP TraceGuard home">
+        <span class="brand-mark" aria-hidden="true">TG</span>
+        <span>
+          <strong>TraceGuard</strong>
+          <small>Evidence Studio</small>
+        </span>
+      </a>
+      <div class="privacy-pill"><span></span> Local only · no upload</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">MCP CAPABILITY ASSURANCE</p>
+          <h1>Make capability drift <em>visible.</em></h1>
+          <p class="hero-text">
+            Inspect policy findings, replay evidence, tamper-evident traces, and
+            scale measurements without sending a byte to a server.
+          </p>
+          <div class="hero-actions">
+            <button class="button primary" id="import-button" type="button">
+              Import JSON evidence
+            </button>
+            <div class="demo-picker">
+              <label class="sr-only" for="demo-select"
+                >Choose demo evidence</label
+              >
+              <select id="demo-select">
+                <option value="drift-report">Catalog drift report</option>
+                <option value="runtime-scenarios">Runtime security pack</option>
+                <option value="execution-trace">
+                  Redacted execution trace
+                </option>
+                <option value="catalog-benchmark">Scale benchmark</option>
+                <option value="baseline">Tool baseline</option>
+              </select>
+              <button class="button secondary" id="demo-button" type="button">
+                Load demo
+              </button>
+            </div>
+          </div>
+          <input
+            id="file-input"
+            type="file"
+            accept="application/json,.json"
+            hidden
+          />
+          <p class="error-message" id="error-message" role="alert" hidden></p>
+        </div>
+        <div class="hero-visual" aria-label="TraceGuard evidence flow">
+          <div class="flow-node server-node">
+            <span class="node-index">01</span>
+            <strong>MCP server</strong>
+            <small>tools · calls · results</small>
+          </div>
+          <div class="flow-line"><span></span></div>
+          <div class="flow-node guard-node">
+            <span class="node-index">02</span>
+            <strong>Policy boundary</strong>
+            <small>allow · approve · deny</small>
+          </div>
+          <div class="flow-line"><span></span></div>
+          <div class="flow-node evidence-node">
+            <span class="node-index">03</span>
+            <strong>Sealed evidence</strong>
+            <small>redact · hash · verify</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-shell" id="workspace" hidden>
+        <div class="workspace-toolbar">
+          <div>
+            <p class="eyebrow" id="artifact-kind"></p>
+            <h2 id="artifact-title">Evidence</h2>
+            <p id="artifact-subtitle"></p>
+          </div>
+          <div class="toolbar-actions">
+            <span class="source-chip" id="source-chip"></span>
+            <button class="button ghost" id="clear-button" type="button">
+              Close
+            </button>
+          </div>
+        </div>
+        <div id="artifact-view" aria-live="polite"></div>
+      </section>
+
+      <section class="principles" id="empty-principles">
+        <article>
+          <span>01</span>
+          <h3>Approve contracts</h3>
+          <p>
+            Record exactly which tools, schemas, and descriptions were reviewed.
+          </p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Enforce boundaries</h3>
+          <p>
+            Separate general policy from concrete baseline drift and runtime
+            consent.
+          </p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Preserve evidence</h3>
+          <p>
+            Redact sensitive values, chain events, and verify the final trace
+            seal.
+          </p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <span>MCP TraceGuard · Evidence stays in this browser</span>
+      <a href="https://github.com/tiempo0206/mcp-traceguard"
+        >View source on GitHub</a
+      >
+    </footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

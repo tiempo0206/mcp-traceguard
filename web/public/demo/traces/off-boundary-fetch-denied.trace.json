@@ -1,0 +1,92 @@
+{
+  "completed_at": "2026-09-18T09:31:46.636643Z",
+  "events": [
+    {
+      "event_hash": "aeb8d44d03a4f00871d4ec7a62b1cfdf58ad0b15d97d8eeffba68d674af1482e",
+      "event_type": "catalog",
+      "payload": {
+        "contract": {
+          "annotations": null,
+          "description": "Simulate a URL fetch without making a network request.",
+          "fingerprint": "c8528be4b5e1c1394379cee2ee288f2f3e30b5bafda0cd4be18c08bd1b98b404",
+          "input_schema": {
+            "properties": {
+              "url": {
+                "title": "Url",
+                "type": "string"
+              }
+            },
+            "required": ["url"],
+            "title": "fetch_urlArguments",
+            "type": "object"
+          },
+          "name": "fetch_url",
+          "output_schema": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "fetch_urlDictOutput",
+            "type": "object"
+          },
+          "title": null
+        },
+        "fingerprint": "c8528be4b5e1c1394379cee2ee288f2f3e30b5bafda0cd4be18c08bd1b98b404"
+      },
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sequence": 0,
+      "timestamp": "2026-09-18T09:31:46.601824Z",
+      "tool": "fetch_url"
+    },
+    {
+      "event_hash": "1a5c174cd2575299ceb0ec8e9f45510483de75f2bdb95083ae2f891579213d51",
+      "event_type": "request",
+      "payload": {
+        "arguments": {
+          "url": "http://untrusted.example/collect"
+        },
+        "redacted_paths": []
+      },
+      "previous_hash": "aeb8d44d03a4f00871d4ec7a62b1cfdf58ad0b15d97d8eeffba68d674af1482e",
+      "sequence": 1,
+      "timestamp": "2026-09-18T09:31:46.601854Z",
+      "tool": "fetch_url"
+    },
+    {
+      "event_hash": "946f3a85aa5e3c047731ef60b0bdf4727bfcbd5ee3f5b08df289e696e4130ea9",
+      "event_type": "decision",
+      "payload": {
+        "approved": false,
+        "matched_rules": ["bounded-fetch"],
+        "outcome": "deny",
+        "reasons": [
+          "A narrowly scoped simulated HTTPS read is allowed",
+          "Only HTTPS fixture URLs are permitted",
+          "The fixture is restricted to api.example.com"
+        ]
+      },
+      "previous_hash": "1a5c174cd2575299ceb0ec8e9f45510483de75f2bdb95083ae2f891579213d51",
+      "sequence": 2,
+      "timestamp": "2026-09-18T09:31:46.601907Z",
+      "tool": "fetch_url"
+    }
+  ],
+  "integrity": "sha256-chain-v1",
+  "schema_version": "1.0",
+  "server": {
+    "name": "TraceGuard Runtime Fixture",
+    "protocol_version": "2026-07-28",
+    "version": ""
+  },
+  "started_at": "2026-09-18T09:31:46.353570Z",
+  "summary": {
+    "call_executed": false,
+    "duration_ms": 283.067,
+    "event_count": 3,
+    "outcome": "deny",
+    "redaction_count": 0,
+    "response_is_error": null
+  },
+  "tool": "fetch_url",
+  "trace_hash": "6ca6196877bdae14988c09375e524d43e6b02d5fafa0f9a1d37ebc862b66cdb3",
+  "trace_id": "3f5a207b-ad8d-4ad9-ace9-e86263beeb37"
+}

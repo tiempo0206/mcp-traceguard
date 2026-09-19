@@ -11,8 +11,7 @@ from dataclasses import dataclass
 from typing import Any
 from urllib.parse import urlparse
 
-from mcp import Client
-
+from mcp_traceguard.connection import client_for_target
 from mcp_traceguard.models import (
     ExecutionTrace,
     Policy,
@@ -300,7 +299,7 @@ async def execute_guarded_call(
     outcome = "error"
     call_executed = False
 
-    async with Client(target) as client:
+    async with client_for_target(target) as client:
         snapshot = await capture_from_client(client)
         contract = next((item for item in snapshot.tools if item.name == tool), None)
         if contract is None:

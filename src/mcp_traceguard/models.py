@@ -228,3 +228,73 @@ class ScenarioReport(StrictModel):
     passed: bool
     summary: ScenarioSummary
     results: list[ScenarioCaseResult]
+
+
+class BenchmarkTiming(StrictModel):
+    median_ms: float = Field(ge=0)
+    p95_ms: float = Field(ge=0)
+
+
+class ScaleBenchmarkResult(StrictModel):
+    tool_count: int = Field(gt=0)
+    controlled_changes: int = Field(ge=0)
+    fingerprint: BenchmarkTiming
+    analysis: BenchmarkTiming
+    fingerprint_tools_per_second: float = Field(ge=0)
+    snapshot_bytes: int = Field(ge=0)
+    report_bytes: int = Field(ge=0)
+    findings: int = Field(ge=0)
+    risk_score: int = Field(ge=0, le=100)
+
+
+class BenchmarkEnvironment(StrictModel):
+    python: str
+    platform: str
+    processor: str
+
+
+class BenchmarkConfig(StrictModel):
+    sizes: list[int]
+    trials: int = Field(gt=0)
+    warmups: int = Field(ge=0)
+
+
+class CatalogBenchmarkReport(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    generated_at: str
+    environment: BenchmarkEnvironment
+    config: BenchmarkConfig
+    results: list[ScaleBenchmarkResult]
+
+
+class BenchmarkBudgetLimit(StrictModel):
+    tool_count: int = Field(gt=0)
+    max_fingerprint_median_ms: float = Field(gt=0)
+    max_analysis_median_ms: float = Field(gt=0)
+    min_fingerprint_tools_per_second: float = Field(ge=0)
+    max_snapshot_bytes: int = Field(gt=0)
+    max_report_bytes: int = Field(gt=0)
+
+
+class BenchmarkBudget(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    description: str
+    limits: list[BenchmarkBudgetLimit] = Field(min_length=1)
+
+
+class BenchmarkBudgetViolation(StrictModel):
+    tool_count: int = Field(gt=0)
+    metric: str
+    actual: float
+    operator: Literal["<=", ">="]
+    limit: float
+    message: str
+
+
+class BenchmarkBudgetReport(StrictModel):
+    schema_version: Literal["1.0"] = "1.0"
+    generated_at: str
+    benchmark_generated_at: str
+    passed: bool
+    evaluated_limits: int = Field(ge=0)
+    violations: list[BenchmarkBudgetViolation]

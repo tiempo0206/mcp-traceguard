@@ -1,0 +1,92 @@
+{
+  "completed_at": "2026-09-18T09:31:44.905111Z",
+  "events": [
+    {
+      "event_hash": "64fae4cbafd56f1f6177bb5b24a9daa581cf936b31bf802eb0a53e4dcace3e35",
+      "event_type": "catalog",
+      "payload": {
+        "contract": {
+          "annotations": null,
+          "description": "Return a blocked command as text without executing it.",
+          "fingerprint": "17fb4e09b0d299b2131578c45dc221a737d79a2bca6878d37de3643553e9cada",
+          "input_schema": {
+            "properties": {
+              "command": {
+                "title": "Command",
+                "type": "string"
+              }
+            },
+            "required": ["command"],
+            "title": "shell_execArguments",
+            "type": "object"
+          },
+          "name": "shell_exec",
+          "output_schema": {
+            "properties": {
+              "result": {
+                "title": "Result",
+                "type": "string"
+              }
+            },
+            "required": ["result"],
+            "title": "shell_execOutput",
+            "type": "object"
+          },
+          "title": null
+        },
+        "fingerprint": "17fb4e09b0d299b2131578c45dc221a737d79a2bca6878d37de3643553e9cada"
+      },
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sequence": 0,
+      "timestamp": "2026-09-18T09:31:44.870423Z",
+      "tool": "shell_exec"
+    },
+    {
+      "event_hash": "dc382e875c0c8594a98629cd841d6cebfd9bd242c2bea29aedd4e8016bda2802",
+      "event_type": "request",
+      "payload": {
+        "arguments": {
+          "command": "echo should-not-run"
+        },
+        "redacted_paths": []
+      },
+      "previous_hash": "64fae4cbafd56f1f6177bb5b24a9daa581cf936b31bf802eb0a53e4dcace3e35",
+      "sequence": 1,
+      "timestamp": "2026-09-18T09:31:44.870460Z",
+      "tool": "shell_exec"
+    },
+    {
+      "event_hash": "b7bf23e4f3e27da0433a7fc1ee4bb0c6ddf3dfb80cadde065c55acab3bc7549e",
+      "event_type": "decision",
+      "payload": {
+        "approved": false,
+        "matched_rules": ["no-shell"],
+        "outcome": "deny",
+        "reasons": ["Shell execution exceeds this client's capability boundary"]
+      },
+      "previous_hash": "dc382e875c0c8594a98629cd841d6cebfd9bd242c2bea29aedd4e8016bda2802",
+      "sequence": 2,
+      "timestamp": "2026-09-18T09:31:44.870483Z",
+      "tool": "shell_exec"
+    }
+  ],
+  "integrity": "sha256-chain-v1",
+  "schema_version": "1.0",
+  "server": {
+    "name": "TraceGuard Runtime Fixture",
+    "protocol_version": "2026-07-28",
+    "version": ""
+  },
+  "started_at": "2026-09-18T09:31:44.622196Z",
+  "summary": {
+    "call_executed": false,
+    "duration_ms": 282.91,
+    "event_count": 3,
+    "outcome": "deny",
+    "redaction_count": 0,
+    "response_is_error": null
+  },
+  "tool": "shell_exec",
+  "trace_hash": "755e535ab52f07c7fb6048b5248415f379d40bf6f2f51771fdbba2be03a91597",
+  "trace_id": "c89d58aa-3c85-4204-b773-48a63934de09"
+}

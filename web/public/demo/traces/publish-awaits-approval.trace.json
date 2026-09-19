@@ -1,0 +1,93 @@
+{
+  "completed_at": "2026-09-18T09:31:45.195074Z",
+  "events": [
+    {
+      "event_hash": "1437bb03721d51769cfde99cb3b6992a60e0aa26a68f2e5a08f043a954e98d70",
+      "event_type": "catalog",
+      "payload": {
+        "contract": {
+          "annotations": null,
+          "description": "Simulate publishing a message without contacting an external service.",
+          "fingerprint": "37319fb7edd412131c916fd9f178ac8edc7f0f2a231ee622fad199db6f721bba",
+          "input_schema": {
+            "properties": {
+              "channel": {
+                "title": "Channel",
+                "type": "string"
+              },
+              "message": {
+                "title": "Message",
+                "type": "string"
+              }
+            },
+            "required": ["channel", "message"],
+            "title": "publish_messageArguments",
+            "type": "object"
+          },
+          "name": "publish_message",
+          "output_schema": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "publish_messageDictOutput",
+            "type": "object"
+          },
+          "title": null
+        },
+        "fingerprint": "37319fb7edd412131c916fd9f178ac8edc7f0f2a231ee622fad199db6f721bba"
+      },
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sequence": 0,
+      "timestamp": "2026-09-18T09:31:45.160411Z",
+      "tool": "publish_message"
+    },
+    {
+      "event_hash": "cc98db82d2480173a91e7095239fca01cd2f2d67a954eb2efdbfd1d396be6713",
+      "event_type": "request",
+      "payload": {
+        "arguments": {
+          "channel": "team",
+          "message": "hello"
+        },
+        "redacted_paths": []
+      },
+      "previous_hash": "1437bb03721d51769cfde99cb3b6992a60e0aa26a68f2e5a08f043a954e98d70",
+      "sequence": 1,
+      "timestamp": "2026-09-18T09:31:45.160448Z",
+      "tool": "publish_message"
+    },
+    {
+      "event_hash": "ff7dfe35926b7814f7ef54d6635bd1ddf8717a1f81b3155be5acffc7e84be67c",
+      "event_type": "decision",
+      "payload": {
+        "approved": false,
+        "matched_rules": ["publish-with-consent"],
+        "outcome": "approval_required",
+        "reasons": ["Publishing has an external side-effect in a real server"]
+      },
+      "previous_hash": "cc98db82d2480173a91e7095239fca01cd2f2d67a954eb2efdbfd1d396be6713",
+      "sequence": 2,
+      "timestamp": "2026-09-18T09:31:45.160525Z",
+      "tool": "publish_message"
+    }
+  ],
+  "integrity": "sha256-chain-v1",
+  "schema_version": "1.0",
+  "server": {
+    "name": "TraceGuard Runtime Fixture",
+    "protocol_version": "2026-07-28",
+    "version": ""
+  },
+  "started_at": "2026-09-18T09:31:44.905243Z",
+  "summary": {
+    "call_executed": false,
+    "duration_ms": 289.826,
+    "event_count": 3,
+    "outcome": "approval_required",
+    "redaction_count": 0,
+    "response_is_error": null
+  },
+  "tool": "publish_message",
+  "trace_hash": "2b1ddc64da32aaba90cf953907ca3636d409795ff6f01b1d2b0752c83f09e486",
+  "trace_id": "ee8e5331-509f-430c-a277-7cb66a99dc63"
+}

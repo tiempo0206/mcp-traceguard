@@ -1,0 +1,174 @@
+{
+  "$defs": {
+    "BenchmarkConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "sizes": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Sizes",
+          "type": "array"
+        },
+        "trials": {
+          "exclusiveMinimum": 0,
+          "title": "Trials",
+          "type": "integer"
+        },
+        "warmups": {
+          "minimum": 0,
+          "title": "Warmups",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sizes",
+        "trials",
+        "warmups"
+      ],
+      "title": "BenchmarkConfig",
+      "type": "object"
+    },
+    "BenchmarkEnvironment": {
+      "additionalProperties": false,
+      "properties": {
+        "platform": {
+          "title": "Platform",
+          "type": "string"
+        },
+        "processor": {
+          "title": "Processor",
+          "type": "string"
+        },
+        "python": {
+          "title": "Python",
+          "type": "string"
+        }
+      },
+      "required": [
+        "python",
+        "platform",
+        "processor"
+      ],
+      "title": "BenchmarkEnvironment",
+      "type": "object"
+    },
+    "BenchmarkTiming": {
+      "additionalProperties": false,
+      "properties": {
+        "median_ms": {
+          "minimum": 0,
+          "title": "Median Ms",
+          "type": "number"
+        },
+        "p95_ms": {
+          "minimum": 0,
+          "title": "P95 Ms",
+          "type": "number"
+        }
+      },
+      "required": [
+        "median_ms",
+        "p95_ms"
+      ],
+      "title": "BenchmarkTiming",
+      "type": "object"
+    },
+    "ScaleBenchmarkResult": {
+      "additionalProperties": false,
+      "properties": {
+        "analysis": {
+          "$ref": "#/$defs/BenchmarkTiming"
+        },
+        "controlled_changes": {
+          "minimum": 0,
+          "title": "Controlled Changes",
+          "type": "integer"
+        },
+        "findings": {
+          "minimum": 0,
+          "title": "Findings",
+          "type": "integer"
+        },
+        "fingerprint": {
+          "$ref": "#/$defs/BenchmarkTiming"
+        },
+        "fingerprint_tools_per_second": {
+          "minimum": 0,
+          "title": "Fingerprint Tools Per Second",
+          "type": "number"
+        },
+        "report_bytes": {
+          "minimum": 0,
+          "title": "Report Bytes",
+          "type": "integer"
+        },
+        "risk_score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Risk Score",
+          "type": "integer"
+        },
+        "snapshot_bytes": {
+          "minimum": 0,
+          "title": "Snapshot Bytes",
+          "type": "integer"
+        },
+        "tool_count": {
+          "exclusiveMinimum": 0,
+          "title": "Tool Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tool_count",
+        "controlled_changes",
+        "fingerprint",
+        "analysis",
+        "fingerprint_tools_per_second",
+        "snapshot_bytes",
+        "report_bytes",
+        "findings",
+        "risk_score"
+      ],
+      "title": "ScaleBenchmarkResult",
+      "type": "object"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/catalog-benchmark.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "config": {
+      "$ref": "#/$defs/BenchmarkConfig"
+    },
+    "environment": {
+      "$ref": "#/$defs/BenchmarkEnvironment"
+    },
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "results": {
+      "items": {
+        "$ref": "#/$defs/ScaleBenchmarkResult"
+      },
+      "title": "Results",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generated_at",
+    "environment",
+    "config",
+    "results"
+  ],
+  "title": "CatalogBenchmarkReport",
+  "type": "object"
+}

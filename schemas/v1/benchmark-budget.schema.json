@@ -1,0 +1,78 @@
+{
+  "$defs": {
+    "BenchmarkBudgetLimit": {
+      "additionalProperties": false,
+      "properties": {
+        "max_analysis_median_ms": {
+          "exclusiveMinimum": 0,
+          "title": "Max Analysis Median Ms",
+          "type": "number"
+        },
+        "max_fingerprint_median_ms": {
+          "exclusiveMinimum": 0,
+          "title": "Max Fingerprint Median Ms",
+          "type": "number"
+        },
+        "max_report_bytes": {
+          "exclusiveMinimum": 0,
+          "title": "Max Report Bytes",
+          "type": "integer"
+        },
+        "max_snapshot_bytes": {
+          "exclusiveMinimum": 0,
+          "title": "Max Snapshot Bytes",
+          "type": "integer"
+        },
+        "min_fingerprint_tools_per_second": {
+          "minimum": 0,
+          "title": "Min Fingerprint Tools Per Second",
+          "type": "number"
+        },
+        "tool_count": {
+          "exclusiveMinimum": 0,
+          "title": "Tool Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tool_count",
+        "max_fingerprint_median_ms",
+        "max_analysis_median_ms",
+        "min_fingerprint_tools_per_second",
+        "max_snapshot_bytes",
+        "max_report_bytes"
+      ],
+      "title": "BenchmarkBudgetLimit",
+      "type": "object"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/tiempo0206/mcp-traceguard/main/schemas/v1/benchmark-budget.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "limits": {
+      "items": {
+        "$ref": "#/$defs/BenchmarkBudgetLimit"
+      },
+      "minItems": 1,
+      "title": "Limits",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "description",
+    "limits"
+  ],
+  "title": "BenchmarkBudget",
+  "type": "object"
+}

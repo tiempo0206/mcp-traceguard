@@ -1,0 +1,89 @@
+{
+  "config": {
+    "sizes": [
+      10,
+      100,
+      1000,
+      5000
+    ],
+    "trials": 7,
+    "warmups": 2
+  },
+  "environment": {
+    "platform": "macOS-15.6.1-arm64-arm-64bit-Mach-O",
+    "processor": "arm",
+    "python": "3.13.9"
+  },
+  "generated_at": "2026-09-18T09:20:45.687860Z",
+  "results": [
+    {
+      "analysis": {
+        "median_ms": 0.052,
+        "p95_ms": 0.063
+      },
+      "controlled_changes": 3,
+      "findings": 5,
+      "fingerprint": {
+        "median_ms": 0.06,
+        "p95_ms": 0.075
+      },
+      "fingerprint_tools_per_second": 166666.67,
+      "report_bytes": 2176,
+      "risk_score": 98,
+      "snapshot_bytes": 4931,
+      "tool_count": 10
+    },
+    {
+      "analysis": {
+        "median_ms": 0.087,
+        "p95_ms": 0.09
+      },
+      "controlled_changes": 3,
+      "findings": 5,
+      "fingerprint": {
+        "median_ms": 0.569,
+        "p95_ms": 0.65
+      },
+      "fingerprint_tools_per_second": 175746.92,
+      "report_bytes": 2176,
+      "risk_score": 98,
+      "snapshot_bytes": 49390,
+      "tool_count": 100
+    },
+    {
+      "analysis": {
+        "median_ms": 0.819,
+        "p95_ms": 0.839
+      },
+      "controlled_changes": 12,
+      "findings": 14,
+      "fingerprint": {
+        "median_ms": 6.08,
+        "p95_ms": 6.28
+      },
+      "fingerprint_tools_per_second": 164473.68,
+      "report_bytes": 8758,
+      "risk_score": 100,
+      "snapshot_bytes": 495042,
+      "tool_count": 1000
+    },
+    {
+      "analysis": {
+        "median_ms": 4.509,
+        "p95_ms": 4.569
+      },
+      "controlled_changes": 52,
+      "findings": 54,
+      "fingerprint": {
+        "median_ms": 32.411,
+        "p95_ms": 53.219
+      },
+      "fingerprint_tools_per_second": 154268.61,
+      "report_bytes": 38078,
+      "risk_score": 100,
+      "snapshot_bytes": 2479721,
+      "tool_count": 5000
+    }
+  ],
+  "schema_version": "1.0"
+}

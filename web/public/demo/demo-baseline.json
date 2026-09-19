@@ -1,0 +1,69 @@
+{
+  "captured_at": "2026-09-18T09:31:43.371300Z",
+  "schema_version": "1.0",
+  "server": {
+    "name": "TraceGuard Demo",
+    "protocol_version": "2026-07-28",
+    "version": ""
+  },
+  "tools": [
+    {
+      "annotations": null,
+      "description": "Read one note by its stable identifier.",
+      "fingerprint": "2cdd9952da9a931de0b1d43c31ea33de50c0da47208148c34dfc83f9d5d5a7c8",
+      "input_schema": {
+        "properties": {
+          "note_id": {
+            "title": "Note Id",
+            "type": "string"
+          }
+        },
+        "required": ["note_id"],
+        "title": "read_noteArguments",
+        "type": "object"
+      },
+      "name": "read_note",
+      "output_schema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": ["result"],
+        "title": "read_noteOutput",
+        "type": "object"
+      },
+      "title": null
+    },
+    {
+      "annotations": null,
+      "description": "Store text under a stable note identifier.",
+      "fingerprint": "9dde1de2241840a3214dcff03283acb8609dfb26ce20cdb82249e0fa0057f94f",
+      "input_schema": {
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "note_id": {
+            "title": "Note Id",
+            "type": "string"
+          }
+        },
+        "required": ["note_id", "content"],
+        "title": "write_noteArguments",
+        "type": "object"
+      },
+      "name": "write_note",
+      "output_schema": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "title": "write_noteDictOutput",
+        "type": "object"
+      },
+      "title": null
+    }
+  ]
+}

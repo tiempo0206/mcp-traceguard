@@ -1,0 +1,123 @@
+{
+  "completed_at": "2026-09-18T09:31:47.255409Z",
+  "events": [
+    {
+      "event_hash": "0d00cc3b89e2499a2ac208167b9aeddc6c89c8d9f731bfa60d024f9f6c441515",
+      "event_type": "catalog",
+      "payload": {
+        "contract": {
+          "annotations": null,
+          "description": "Read a deterministic test profile containing a fake credential.",
+          "fingerprint": "ea54af1a08f7434e57b11cace60838ff4efe27bd236dce8d94569ee92213ddd2",
+          "input_schema": {
+            "properties": {
+              "user_id": {
+                "title": "User Id",
+                "type": "string"
+              }
+            },
+            "required": ["user_id"],
+            "title": "read_profileArguments",
+            "type": "object"
+          },
+          "name": "read_profile",
+          "output_schema": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "read_profileDictOutput",
+            "type": "object"
+          },
+          "title": null
+        },
+        "fingerprint": "ea54af1a08f7434e57b11cace60838ff4efe27bd236dce8d94569ee92213ddd2"
+      },
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sequence": 0,
+      "timestamp": "2026-09-18T09:31:47.190430Z",
+      "tool": "read_profile"
+    },
+    {
+      "event_hash": "a5f8cf9139799af501db75fa62dcafd5c9eaf68744f41760bfbcbf2678751cce",
+      "event_type": "request",
+      "payload": {
+        "arguments": {
+          "user_id": "demo"
+        },
+        "redacted_paths": []
+      },
+      "previous_hash": "0d00cc3b89e2499a2ac208167b9aeddc6c89c8d9f731bfa60d024f9f6c441515",
+      "sequence": 1,
+      "timestamp": "2026-09-18T09:31:47.190597Z",
+      "tool": "read_profile"
+    },
+    {
+      "event_hash": "865311b960d266fbc0144137d59ce41d67e39197278f4e676c9074f79e5775e3",
+      "event_type": "decision",
+      "payload": {
+        "approved": false,
+        "matched_rules": ["profile-read"],
+        "outcome": "allow",
+        "reasons": ["The deterministic profile fixture is read-only"]
+      },
+      "previous_hash": "a5f8cf9139799af501db75fa62dcafd5c9eaf68744f41760bfbcbf2678751cce",
+      "sequence": 2,
+      "timestamp": "2026-09-18T09:31:47.190678Z",
+      "tool": "read_profile"
+    },
+    {
+      "event_hash": "3cc698ca8d258c8bce8fe97761ca8bf36c45f2acbefa9dc3050ef5e5b1373d93",
+      "event_type": "response",
+      "payload": {
+        "redacted_paths": [
+          "/content/0/text/api_token",
+          "/structuredContent/api_token"
+        ],
+        "result": {
+          "_meta": {
+            "io.modelcontextprotocol/serverInfo": {
+              "name": "TraceGuard Runtime Fixture",
+              "version": ""
+            }
+          },
+          "content": [
+            {
+              "text": "{\"api_token\": \"[REDACTED]\", \"display_name\": \"Demo User\", \"user_id\": \"demo\"}",
+              "type": "text"
+            }
+          ],
+          "isError": false,
+          "resultType": "complete",
+          "structuredContent": {
+            "api_token": "[REDACTED]",
+            "display_name": "Demo User",
+            "user_id": "demo"
+          }
+        }
+      },
+      "previous_hash": "865311b960d266fbc0144137d59ce41d67e39197278f4e676c9074f79e5775e3",
+      "sequence": 3,
+      "timestamp": "2026-09-18T09:31:47.207664Z",
+      "tool": "read_profile"
+    }
+  ],
+  "integrity": "sha256-chain-v1",
+  "schema_version": "1.0",
+  "server": {
+    "name": "TraceGuard Runtime Fixture",
+    "protocol_version": "2026-07-28",
+    "version": ""
+  },
+  "started_at": "2026-09-18T09:31:46.936492Z",
+  "summary": {
+    "call_executed": true,
+    "duration_ms": 318.762,
+    "event_count": 4,
+    "outcome": "allow",
+    "redaction_count": 2,
+    "response_is_error": false
+  },
+  "tool": "read_profile",
+  "trace_hash": "776d5c5dce156921547e7d61778036c30ef2c0067b131227c17790cbabc50d94",
+  "trace_id": "ee59a375-7b2f-4a32-bc14-818bfcba8b2e"
+}

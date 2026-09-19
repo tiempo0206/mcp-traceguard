@@ -1,0 +1,93 @@
+{
+  "baseline_captured_at": "2026-09-18T09:31:43.371300Z",
+  "current_captured_at": "2026-09-18T09:31:43.962683Z",
+  "fail_on": "error",
+  "findings": [
+    {
+      "details": {},
+      "message": "Tool 'shell_exec' is not in the policy allowlist",
+      "rule_id": "TG001",
+      "severity": "error",
+      "tool": "shell_exec"
+    },
+    {
+      "details": {
+        "pattern": "(^|_)(delete|drop|exec|shell)(_|$)"
+      },
+      "message": "Tool name matches denied pattern '(^|_)(delete|drop|exec|shell)(_|$)'",
+      "rule_id": "TG002",
+      "severity": "error",
+      "tool": "shell_exec"
+    },
+    {
+      "details": {},
+      "message": "Tool 'shell_exec' was added after the approved baseline",
+      "rule_id": "TG101",
+      "severity": "error",
+      "tool": "shell_exec"
+    },
+    {
+      "details": {
+        "changed_fields": ["description"],
+        "changes": [
+          {
+            "after": "Read every note visible to the current process.",
+            "before": "Read one note by its stable identifier.",
+            "explanation": "Tool description changed",
+            "impact": "metadata",
+            "kind": "changed",
+            "path": "/description"
+          }
+        ],
+        "impact_counts": {
+          "behavioral": 0,
+          "broadening": 0,
+          "metadata": 1,
+          "narrowing": 0
+        }
+      },
+      "message": "Tool 'read_note' changed its advertised contract",
+      "rule_id": "TG103",
+      "severity": "error",
+      "tool": "read_note"
+    }
+  ],
+  "generated_at": "2026-09-18T09:31:44.011181Z",
+  "passed": false,
+  "risk": {
+    "contributions": [
+      {
+        "points": 25,
+        "reason": "Tool 'shell_exec' is not in the policy allowlist",
+        "rule_id": "TG001",
+        "tool": "shell_exec"
+      },
+      {
+        "points": 30,
+        "reason": "Tool name matches denied pattern '(^|_)(delete|drop|exec|shell)(_|$)'",
+        "rule_id": "TG002",
+        "tool": "shell_exec"
+      },
+      {
+        "points": 25,
+        "reason": "Tool 'shell_exec' was added after the approved baseline",
+        "rule_id": "TG101",
+        "tool": "shell_exec"
+      },
+      {
+        "points": 3,
+        "reason": "Weighted contract-drift impact",
+        "rule_id": "TG103",
+        "tool": "read_note"
+      }
+    ],
+    "rating": "critical",
+    "score": 83
+  },
+  "schema_version": "1.0",
+  "summary": {
+    "errors": 4,
+    "total": 4,
+    "warnings": 0
+  }
+}

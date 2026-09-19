@@ -1,0 +1,346 @@
+{
+  "generated_at": "2026-09-18T09:31:46.636799Z",
+  "passed": true,
+  "results": [
+    {
+      "category": "secret-handling",
+      "checks": [
+        {
+          "expected": "allow",
+          "name": "outcome",
+          "observed": "allow",
+          "passed": true
+        },
+        {
+          "expected": true,
+          "name": "call_executed",
+          "observed": true,
+          "passed": true
+        },
+        {
+          "expected": 2,
+          "name": "minimum_redactions",
+          "observed": 2,
+          "passed": true
+        },
+        {
+          "expected": ["profile-read"],
+          "name": "matched_rules",
+          "observed": ["profile-read"],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "profile-secret-redaction",
+      "passed": true,
+      "title": "Allowed structured result is redacted",
+      "trace_file": "profile-secret-redaction.trace.json",
+      "trace_id": "d4882610-3391-4558-bd73-8f561ab1d801"
+    },
+    {
+      "category": "least-privilege",
+      "checks": [
+        {
+          "expected": "deny",
+          "name": "outcome",
+          "observed": "deny",
+          "passed": true
+        },
+        {
+          "expected": false,
+          "name": "call_executed",
+          "observed": false,
+          "passed": true
+        },
+        {
+          "expected": 0,
+          "name": "minimum_redactions",
+          "observed": 0,
+          "passed": true
+        },
+        {
+          "expected": ["no-shell"],
+          "name": "matched_rules",
+          "observed": ["no-shell"],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "shell-denied",
+      "passed": true,
+      "title": "Shell capability is denied before execution",
+      "trace_file": "shell-denied.trace.json",
+      "trace_id": "c89d58aa-3c85-4204-b773-48a63934de09"
+    },
+    {
+      "category": "human-approval",
+      "checks": [
+        {
+          "expected": "approval_required",
+          "name": "outcome",
+          "observed": "approval_required",
+          "passed": true
+        },
+        {
+          "expected": false,
+          "name": "call_executed",
+          "observed": false,
+          "passed": true
+        },
+        {
+          "expected": 0,
+          "name": "minimum_redactions",
+          "observed": 0,
+          "passed": true
+        },
+        {
+          "expected": ["publish-with-consent"],
+          "name": "matched_rules",
+          "observed": ["publish-with-consent"],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "publish-awaits-approval",
+      "passed": true,
+      "title": "Side effect waits for explicit approval",
+      "trace_file": "publish-awaits-approval.trace.json",
+      "trace_id": "ee8e5331-509f-430c-a277-7cb66a99dc63"
+    },
+    {
+      "category": "human-approval",
+      "checks": [
+        {
+          "expected": "allow",
+          "name": "outcome",
+          "observed": "allow",
+          "passed": true
+        },
+        {
+          "expected": true,
+          "name": "call_executed",
+          "observed": true,
+          "passed": true
+        },
+        {
+          "expected": 0,
+          "name": "minimum_redactions",
+          "observed": 0,
+          "passed": true
+        },
+        {
+          "expected": ["publish-with-consent"],
+          "name": "matched_rules",
+          "observed": ["publish-with-consent"],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "publish-after-approval",
+      "passed": true,
+      "title": "Approved side effect is executed",
+      "trace_file": "publish-after-approval.trace.json",
+      "trace_id": "b880417d-e6d3-426a-87f4-380812980849"
+    },
+    {
+      "category": "argument-policy",
+      "checks": [
+        {
+          "expected": "deny",
+          "name": "outcome",
+          "observed": "deny",
+          "passed": true
+        },
+        {
+          "expected": false,
+          "name": "call_executed",
+          "observed": false,
+          "passed": true
+        },
+        {
+          "expected": 0,
+          "name": "minimum_redactions",
+          "observed": 0,
+          "passed": true
+        },
+        {
+          "expected": ["publish-with-consent"],
+          "name": "matched_rules",
+          "observed": ["publish-with-consent"],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "approval-cannot-override-deny",
+      "passed": true,
+      "title": "Approval cannot override a forbidden argument",
+      "trace_file": "approval-cannot-override-deny.trace.json",
+      "trace_id": "2f500c2f-01c9-4826-936e-0a96e4e55293"
+    },
+    {
+      "category": "least-privilege",
+      "checks": [
+        {
+          "expected": "deny",
+          "name": "outcome",
+          "observed": "deny",
+          "passed": true
+        },
+        {
+          "expected": false,
+          "name": "call_executed",
+          "observed": false,
+          "passed": true
+        },
+        {
+          "expected": 0,
+          "name": "minimum_redactions",
+          "observed": 0,
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "matched_rules",
+          "observed": [],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "unmatched-tool-default-deny",
+      "passed": true,
+      "title": "An unclassified tool is denied by default",
+      "trace_file": "unmatched-tool-default-deny.trace.json",
+      "trace_id": "3aabdc34-66c7-4123-9585-125821857114"
+    },
+    {
+      "category": "network-boundary",
+      "checks": [
+        {
+          "expected": "allow",
+          "name": "outcome",
+          "observed": "allow",
+          "passed": true
+        },
+        {
+          "expected": true,
+          "name": "call_executed",
+          "observed": true,
+          "passed": true
+        },
+        {
+          "expected": 0,
+          "name": "minimum_redactions",
+          "observed": 0,
+          "passed": true
+        },
+        {
+          "expected": ["bounded-fetch"],
+          "name": "matched_rules",
+          "observed": ["bounded-fetch"],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "bounded-https-fetch",
+      "passed": true,
+      "title": "Allowed HTTPS host remains inside the boundary",
+      "trace_file": "bounded-https-fetch.trace.json",
+      "trace_id": "1578bed4-35e2-4162-9a5a-5412651e3b49"
+    },
+    {
+      "category": "network-boundary",
+      "checks": [
+        {
+          "expected": "deny",
+          "name": "outcome",
+          "observed": "deny",
+          "passed": true
+        },
+        {
+          "expected": false,
+          "name": "call_executed",
+          "observed": false,
+          "passed": true
+        },
+        {
+          "expected": 0,
+          "name": "minimum_redactions",
+          "observed": 0,
+          "passed": true
+        },
+        {
+          "expected": ["bounded-fetch"],
+          "name": "matched_rules",
+          "observed": ["bounded-fetch"],
+          "passed": true
+        },
+        {
+          "expected": [],
+          "name": "trace_integrity",
+          "observed": [],
+          "passed": true
+        }
+      ],
+      "id": "off-boundary-fetch-denied",
+      "passed": true,
+      "title": "Wrong scheme and host are denied",
+      "trace_file": "off-boundary-fetch-denied.trace.json",
+      "trace_id": "3f5a207b-ad8d-4ad9-ace9-e86263beeb37"
+    }
+  ],
+  "schema_version": "1.0",
+  "server": {
+    "name": "TraceGuard Runtime Fixture",
+    "protocol_version": "2026-07-28",
+    "version": ""
+  },
+  "suite_name": "Runtime Security Pack 1.0",
+  "summary": {
+    "category_scores": {
+      "argument-policy": 100.0,
+      "human-approval": 100.0,
+      "least-privilege": 100.0,
+      "network-boundary": 100.0,
+      "secret-handling": 100.0
+    },
+    "failed": 0,
+    "passed": 8,
+    "score_percent": 100.0,
+    "total": 8
+  }
+}
