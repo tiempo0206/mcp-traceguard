@@ -320,9 +320,18 @@ on `PATH`.
   document widths (no horizontal overflow).
 - Browser console contained zero warnings or errors.
 
-### Release boundary
+### Release
+
+- Release implementation commit:
+  [`6f7d606`](https://github.com/tiempo0206/mcp-traceguard/commit/6f7d606864b11a026e9a1a128a6d5386c619562a).
+- Clean GitHub Actions run:
+  [`35418095710`](https://github.com/tiempo0206/mcp-traceguard/actions/runs/35418095710),
+  with the Python and Web jobs both passing.
+- Published tag and release:
+  [`v1.0.0`](https://github.com/tiempo0206/mcp-traceguard/releases/tag/v1.0.0).
+
+### External contribution boundary
 
 No third-party issue or pull request was opened automatically. The upstream
 candidate follows the SDK's issue-first and AI-disclosure rules and is ready for
-the repository owner to review and submit. Final release completion requires a
-green GitHub Actions run and the public `v1.0.0` tag/release.
+the repository owner to review and submit.

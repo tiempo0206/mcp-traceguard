@@ -24,7 +24,7 @@ verified without paid model credentials.
 - [x] Day 11: performance measurements and regression budgets.
 - [x] Day 12: end-to-end tests, threat model, and security documentation.
 - [x] Day 13: public demo, screenshot, architecture documentation, and resume copy.
-- [x] Day 14: final QA, tagged release preparation, and a carefully scoped
+- [x] Day 14: final QA, tagged `v1.0.0` release, and a carefully scoped
       upstream contribution candidate. External submission remains an explicit
       owner decision under the upstream project's human-review policy.
 
